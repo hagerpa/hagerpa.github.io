@@ -1,7 +1,3 @@
----
-layout: home
----
-
 # Research interest
 
 # Talks
