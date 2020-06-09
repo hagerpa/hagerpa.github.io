@@ -1,3 +1,9 @@
+----
+layout: home
+----
+
+# Impressum
+
 Paul Hager<br/>
 Fakultät II - Mathematik und Naturwissenschaften<br/>
 Institut für Mathematik - Sekr. MA 7-2<br/>
