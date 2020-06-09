@@ -1,8 +1,8 @@
 PhD student under supervision of Peter Friz in a Math+ Project at TU Berlin.
 
 # Research interest
-- Signatures and it applications in stochastic optimization and machine learning
-- Fractional Brownian motion, Log-correlated fields, Gaussian mutiplicative chaos and its applications to volatilty modelling
+- Signatures and their applications in stochastic optimization and machine learning
+- Fractional Brownian motion, Log-correlated fields, Gaussian multiplicative chaos and its applications to volatilty modelling
 
 # Selected Talks
 - Unified cumulant signature and Magnus expansion, 09 June 2020, [3th Berlin-Oxford Young Researchers Meeting on Applied Stochastic Analysis](http://www.wias-berlin.de/workshops/YRM2020/)
