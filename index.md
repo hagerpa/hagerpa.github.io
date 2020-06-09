@@ -6,6 +6,7 @@ PhD student under the supervision of [Peter Friz](http://page.math.tu-berlin.de/
 
 # Selected Talks
 - Unified cumulant signature and Magnus expansion, 09 June 2020, [3th Berlin-Oxford Young Researchers Meeting on Applied Stochastic Analysis](http://www.wias-berlin.de/workshops/YRM2020/)
+- What is Gaussian multiplicative chaos?, 01 January 2020, [What is ...? Seminar - BMS](https://whatisseminar.xyz/talks/20200131.html)
 - The Multiplicative Chaos of Fractional Brownian Motions with Vanishing Hurst Parameters, [26 June 2019, Imperial College London](https://www.imperial.ac.uk/events/96846/paul-hager-the-multiplicative-chaos-of-fractional-brownian-motions-with-vanishing-hurst-parameters/)
 
 # Publications
