@@ -1,4 +1,4 @@
-PhD student under supervision of Peter Friz in a Math+ Project at TU Berlin.
+PhD student under the supervision of [Peter Friz](http://page.math.tu-berlin.de/~friz/) in a Math+ Project at TU Berlin.
 
 # Research interest
 - Signatures and their applications in stochastic optimization and machine learning
