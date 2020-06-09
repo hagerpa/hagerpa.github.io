@@ -1,6 +1,6 @@
 # Impressum
 
-Paul Hager
+Paul Hager<br/>
 Fakultät II - Mathematik und Naturwissenschaften<br/>
 Institut für Mathematik - Sekr. MA 7-2<br/>
 Straße des 17. Juni 136<br/>
