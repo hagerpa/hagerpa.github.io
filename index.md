@@ -5,6 +5,7 @@ PhD student under the supervision of [Peter Friz](http://page.math.tu-berlin.de/
 - Fractional Brownian motion, Log-correlated fields, Gaussian multiplicative chaos and its applications to volatilty modelling
 
 # Preprints
+- Paul Hager, Eyal Neuman, *The Multiplicative Chaos of H=0 Fractional Brownian Fields*, 4 Aug 2020, [arxiv](https://arxiv.org/abs/2008.01385)
 - Christian Bayer, Denis Belomestny, Paul Hager, Paolo Pigato, John Schoenmakers, *Randomized optimal stopping algorithms and their convergence analysis*, 3 Feb 2020, [arxiv](https://arxiv.org/abs/2002.00816)
 
 # Publications
