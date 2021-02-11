@@ -7,7 +7,7 @@ PhD student under the supervision of [Peter Friz](http://page.math.tu-berlin.de/
 # Preprints
 - P. K. Friz, P. Hager, N. Tapia, *Unified Signature Cumulants and Generalized Magnus Expansions*, 8 Feb 2021, [arxiv](https://arxiv.org/abs/2102.03345)
 - C. Bayer, P. Hager, S. Riedel, J. Schoenmakers, *Optimal stopping with signatures*, 26 Nov 2020, [WIAS preprint](http://dx.doi.org/10.20347/WIAS.PREPRINT.2790)
-- C. Bayer, D. Belomestny, P. Hager, P. Pigato, J. Schoenmakers, V. Spokoiny, *Reinforced optimal control*, 26 Nov 2020, [arxiv](http://arxiv.org/abs/2011.12382)
+- C. Bayer, D. Belomestny, P. Hager, P. Pigato, J. Schoenmakers, V. Spokoiny, *Reinforced optimal control*, 24 Nov 2020, [arxiv](http://arxiv.org/abs/2011.12382)
 - P. Hager, E. Neuman, *The Multiplicative Chaos of H=0 Fractional Brownian Fields*, 4 Aug 2020, [arxiv](https://arxiv.org/abs/2008.01385)
 - C. Bayer, D. Belomestny, P. Hager, P. Pigato, J. Schoenmakers, *Randomized optimal stopping algorithms and their convergence analysis*, 3 Feb 2020, [arxiv](https://arxiv.org/abs/2002.00816)
 
