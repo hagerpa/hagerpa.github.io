@@ -14,7 +14,7 @@ PhD student under the supervision of [Peter Friz](http://page.math.tu-berlin.de/
 # Publications
 
 # Selected Talks
-- Unified Signature Cumulants and Generalized Magnus Expansions, [Cumulants in Stochastic Analysis](http://page.math.tu-berlin.de/~tapia/cumulants/), [(slides)](http://page.math.tu-berlin.de/~tapia/cumulants/slides/Hager-CSA21.pdf) [(video)](http://page.math.tu-berlin.de/~tapia/cumulants/videos/hager-csa21.mp4)
+- Unified Signature Cumulants and Generalized Magnus Expansions, [Cumulants in Stochastic Analysis](http://page.math.tu-berlin.de/~tapia/cumulants/), [(slides)](http://page.math.tu-berlin.de/~tapia/cumulants/slides/Hager-CSA21.pdf), [(video)](http://page.math.tu-berlin.de/~tapia/cumulants/videos/hager-csa21.mp4)
 - Optimal stopping with Signatures, January 29, 2021, [XXII Workshop On Quantitative Finance](http://dse.univr.it/qfw2021/)
 - Unified signature cumulants and Magnus expansion, 25 August 2020, [Bernoulli-IMS One World Symposium 2020](https://www.worldsymposium2020.org), prerecorded [talk on youtube](https://www.youtube.com/watch?v=WNqd31ALBDc&t=4s)
 - What is Gaussian multiplicative chaos?, 01 January 2020, [What is ...? Seminar - BMS](https://whatisseminar.xyz/talks/20200131.html)
