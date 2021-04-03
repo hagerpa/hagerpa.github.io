@@ -1,8 +1,8 @@
 PhD student under the supervision of [Peter Friz](http://page.math.tu-berlin.de/~friz/) in a [Math+ Project](https://mathplus.de/research-2/application-areas/aa4-energy-markets/aa4-2/) at [TU Berlin](https://www.math.tu-berlin.de/arbeitsgruppen/ag_stochfinanz/mitarbeiter/wissenschaftliche_mitarbeiterinnen_und_mitarbeiter/).
 
 # Research interest
-- Signatures and their applications in stochastic optimization and machine learning
-- Fractional Brownian motion, Log-correlated fields, Gaussian multiplicative chaos and its applications to volatilty modelling
+- Signatures and their applications in stochastic optimization and machine learning.
+- Fractional Brownian motion, log-correlated fields, Gaussian multiplicative chaos and their applications to volatility modelling.
 
 # Preprints
 - P. K. Friz, P. Hager, N. Tapia, *Unified Signature Cumulants and Generalized Magnus Expansions*, 8 Feb 2021, [arxiv](https://arxiv.org/abs/2102.03345)
