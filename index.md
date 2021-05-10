@@ -1,5 +1,5 @@
 I am a scientific assistant in a [Math+ Project](https://mathplus.de/research-2/application-areas/aa4-energy-markets/aa4-2/) at [TU Berlin](https://www.math.tu-berlin.de/arbeitsgruppen/ag_stochfinanz/mitarbeiter/wissenschaftliche_mitarbeiterinnen_und_mitarbeiter/)
-and a PhD student under the supervision of [Prof. Peter K. Friz](http://page.math.tu-berlin.de/~friz/) and [Dr. Christian Bayer](https://www.wias-berlin.de/people/bayerc/).
+and a PhD student under the supervision of [Peter K. Friz](http://page.math.tu-berlin.de/~friz/) and [Christian Bayer](https://www.wias-berlin.de/people/bayerc/).
 
 You can find my CV here: [PDF](./paul_hager_cv.pdf).
 
