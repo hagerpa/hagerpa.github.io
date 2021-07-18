@@ -1,5 +1,7 @@
 source "https://rubygems.org"
 
+gem "addressable", ">= 2.8.0"
+
 gem "kramdown", ">= 2.3.0"
 
 # Hello! This is where you manage which Jekyll version is used to run.
