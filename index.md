@@ -13,8 +13,8 @@ You can find my CV here: [PDF](./paul_hager_cv.pdf).
 - C. Bayer, P. Hager, S. Riedel, J. Schoenmakers, *Optimal stopping with signatures*, 03 May 2021, [arxiv](http://arxiv.org/abs/2105.00778)
 - P. K. Friz, P. Hager, N. Tapia, *Unified Signature Cumulants and Generalized Magnus Expansions*, 8 Feb 2021, [arxiv](https://arxiv.org/abs/2102.03345)
 - C. Bayer, D. Belomestny, P. Hager, P. Pigato, J. Schoenmakers, V. Spokoiny, *Reinforced optimal control*, 24 Nov 2020, [arxiv](http://arxiv.org/abs/2011.12382)
-- P. Hager, E. Neuman, *The Multiplicative Chaos of H=0 Fractional Brownian Fields*, 4 Aug 2020, [arxiv](https://arxiv.org/abs/2008.01385) (accepted at the Annals of Applied Probability)
-- C. Bayer, D. Belomestny, P. Hager, P. Pigato, J. Schoenmakers, *Randomized optimal stopping algorithms and their convergence analysis*, 3 Feb 2020, [arxiv](https://arxiv.org/abs/2002.00816) (accepted at the SIAM Journal on Financial Mathematics)
+- P. Hager, E. Neuman, *The Multiplicative Chaos of H=0 Fractional Brownian Fields*, 4 Aug 2020, [arxiv](https://arxiv.org/abs/2008.01385) (accepted at the *Annals of Applied Probability*)
+- C. Bayer, D. Belomestny, P. Hager, P. Pigato, J. Schoenmakers, *Randomized optimal stopping algorithms and their convergence analysis*, 3 Feb 2020, [arxiv](https://arxiv.org/abs/2002.00816) (accepted at the *SIAM Journal on Financial Mathematics*)
 
 # Publications
 
