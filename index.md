@@ -1,6 +1,8 @@
 ![image](me_in_lecturehall.jpg){: style="float:right; width:100px; padding:10px"}
 
-I am a scientific assistant in a [Math+ Project](https://mathplus.de/research-2/application-areas/aa4-energy-markets/aa4-2/) at [TU Berlin](https://www.math.tu-berlin.de/arbeitsgruppen/ag_stochfinanz/mitarbeiter/wissenschaftliche_mitarbeiterinnen_und_mitarbeiter/)
+I am postdoctoral researcher at the Humboldt University of Berlin.
+
+Previously, I was a scientific assistant in a [Math+ Project](https://mathplus.de/research-2/application-areas/aa4-energy-markets/aa4-2/) at [TU Berlin](https://www.math.tu-berlin.de/arbeitsgruppen/ag_stochfinanz/mitarbeiter/wissenschaftliche_mitarbeiterinnen_und_mitarbeiter/)
 and a PhD student under the supervision of [Peter K. Friz](http://page.math.tu-berlin.de/~friz/) and [Christian Bayer](https://www.wias-berlin.de/people/bayerc/).
 
 You can find my CV here: [PDF](./paul_hager_cv.pdf).
@@ -14,9 +16,9 @@ You can find my CV here: [PDF](./paul_hager_cv.pdf).
 - P. K. Friz, P. Hager, N. Tapia, *Unified Signature Cumulants and Generalized Magnus Expansions*, 8 Feb 2021, [arxiv](https://arxiv.org/abs/2102.03345)
 - C. Bayer, D. Belomestny, P. Hager, P. Pigato, J. Schoenmakers, V. Spokoiny, *Reinforced optimal control*, 24 Nov 2020, [arxiv](http://arxiv.org/abs/2011.12382)
 - P. Hager, E. Neuman, *The Multiplicative Chaos of H=0 Fractional Brownian Fields*, 4 Aug 2020, [arxiv](https://arxiv.org/abs/2008.01385) (accepted at the *Annals of Applied Probability*)
-- C. Bayer, D. Belomestny, P. Hager, P. Pigato, J. Schoenmakers, *Randomized optimal stopping algorithms and their convergence analysis*, 3 Feb 2020, [arxiv](https://arxiv.org/abs/2002.00816) (accepted at the *SIAM Journal on Financial Mathematics*)
 
 # Publications
+- C. Bayer, D. Belomestny, P. Hager, P. Pigato, J. Schoenmakers, *Randomized optimal stopping algorithms and their convergence analysis*, SIAM Journal on Financial Mathematics, 12(3), 1201–1225 (2021), ([journal](https://epubs.siam.org/doi/abs/10.1137/20M1373876), [arxiv](https://arxiv.org/abs/2002.00816))
 
 # Selected Talks
 - Unified Signature Cumulants and Generalized Magnus Expansions, 24 Feb 2021, [Cumulants in Stochastic Analysis](http://page.math.tu-berlin.de/~tapia/cumulants/), [(slides)](http://page.math.tu-berlin.de/~tapia/cumulants/slides/Hager-CSA21.pdf), [(video)](http://page.math.tu-berlin.de/~tapia/cumulants/videos/hager-csa21.mp4)
