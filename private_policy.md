@@ -57,10 +57,10 @@ Hinweis zur verantwortlichen Stelle
 Die verantwortliche Stelle für die Datenverarbeitung auf dieser Website ist:
 
 Paul Hager
-Fakultät II - Mathematik und Naturwissenschaften
-Institut für Mathematik - Sekr. MA 7-2
-Straße des 17. Juni 136
-10623 Berlin
+Humboldt University Berlin
+Department of Mathematics
+Unter den Linden 6
+10099 Berlin
 
 Verantwortliche Stelle ist die natürliche oder juristische Person, die allein oder gemeinsam mit anderen über die Zwecke und Mittel der Verarbeitung von personenbezogenen Daten (z. B. Namen, E-Mail-Adressen o. Ä.) entscheidet.
 
