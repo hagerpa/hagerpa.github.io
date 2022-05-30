@@ -18,11 +18,10 @@ You can find my CV here: [PDF](./paul_hager_cv.pdf).
   (to appear in the *Forum of Mathematics, Sigma*)
 - C. Bayer, D. Belomestny, P. Hager, P. Pigato, J. Schoenmakers, V. Spokoiny, *Reinforced optimal control*, 24 Nov 2020, [arxiv](http://arxiv.org/abs/2011.12382)\
   (to appear in the *Communications in Mathematical Sciences*)
-- P. Hager, E. Neuman, *The Multiplicative Chaos of H=0 Fractional Brownian Fields*, 4 Aug 2020, [arxiv](https://arxiv.org/abs/2008.01385)\
-  (to appear in the *Annals of Applied Probability*)
 
 # Publications
-- C. Bayer, D. Belomestny, P. Hager, P. Pigato, J. Schoenmakers, *Randomized optimal stopping algorithms and their convergence analysis*, SIAM Journal on Financial Mathematics, 12(3), 1201–1225 (2021), ([journal](https://epubs.siam.org/doi/abs/10.1137/20M1373876), [arxiv](https://arxiv.org/abs/2002.00816))
+- P. Hager, E. Neuman, *The multiplicative chaos of H = 0 fractional Brownian fields.*, Annals of Applied Probability, 32 (3) 2139 - 2179 June 2022, ([journal](http://dx.doi.org/10.1214/21-AAP1730), [arxiv](https://arxiv.org/abs/2008.01385))
+- C. Bayer, D. Belomestny, P. Hager, P. Pigato, J. Schoenmakers, *Randomized optimal stopping algorithms and their convergence analysis*, SIAM Journal on Financial Mathematics, 12(3) 1201–1225 (2021), ([journal](https://epubs.siam.org/doi/abs/10.1137/20M1373876), [arxiv](https://arxiv.org/abs/2002.00816))
 
 # Selected Talks
 - [Mini-Course on Machine Learning Methods in Finance @ KAUST](https://cemse.kaust.edu.sa/events/event/snsl-workshop)
