@@ -28,7 +28,3 @@ You can find my CV here: [PDF](./paul_hager_cv.pdf).
     - Lecture on *Calculation of Deep Log Signature Stopping Rules*, , 23 May 2021, [html](./talks/calculating_signature_stopping_rules.html), [notebook](./talks/calculating_signature_stopping_rules.zip), [youtube](https://www.youtube.com/watch?v=6p7u8B_1SMA)
     - Exercise Sheet on the *Simulation of fractional Brownian motion* [pdf](./talks/excersize_sheet_sampling_of_fBm.pdf)
 - Unified Signature Cumulants and Generalized Magnus Expansions, 24 Feb 2021, [Cumulants in Stochastic Analysis](http://page.math.tu-berlin.de/~tapia/cumulants/), [(slides)](http://page.math.tu-berlin.de/~tapia/cumulants/slides/Hager-CSA21.pdf), [(video)](http://page.math.tu-berlin.de/~tapia/cumulants/videos/hager-csa21.mp4)
-- Optimal stopping with Signatures, 29 Jan 2021, [XXII Workshop On Quantitative Finance](http://dse.univr.it/qfw2021/)
-- Unified signature cumulants and Magnus expansion, 25 Aug 2020, [Bernoulli-IMS One World Symposium 2020](https://www.worldsymposium2020.org), prerecorded [talk on youtube](https://www.youtube.com/watch?v=WNqd31ALBDc&t=4s)
-- What is Gaussian multiplicative chaos?, 01 Jan 2020, [What is ...? Seminar - BMS](https://whatisseminar.xyz/talks/20200131.html)
-- The Multiplicative Chaos of Fractional Brownian Motions with Vanishing Hurst Parameters, 26 Jun 2019, [Imperial College London](https://www.imperial.ac.uk/events/96846/paul-hager-the-multiplicative-chaos-of-fractional-brownian-motions-with-vanishing-hurst-parameters/)
