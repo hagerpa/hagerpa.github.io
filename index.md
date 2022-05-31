@@ -25,6 +25,6 @@ You can find my CV here: [PDF](./paul_hager_cv.pdf).
 
 # Selected Talks
 - [Mini-Course on Machine Learning Methods in Finance @ KAUST](https://cemse.kaust.edu.sa/events/event/snsl-workshop)
-    - Lecture on *Calculation of Deep Log Signature Stopping Rules*, , 23 May 2021, [html](./talks/calculating_signature_stopping_rules.html), [notebook](./talks/calculating_signature_stopping_rules.zip), [youtube](https://www.youtube.com/watch?v=6p7u8B_1SMA)
+    - Lecture on *Calculation of Deep Log Signature Stopping Rules*, , 23 May 2022, [html](./talks/calculating_signature_stopping_rules.html), [notebook](./talks/calculating_signature_stopping_rules.zip), [youtube](https://www.youtube.com/watch?v=6p7u8B_1SMA)
     - Exercise Sheet on the *Simulation of fractional Brownian motion* [pdf](./talks/excersize_sheet_sampling_of_fBm.pdf)
 - Unified Signature Cumulants and Generalized Magnus Expansions, 24 Feb 2021, [Cumulants in Stochastic Analysis](http://page.math.tu-berlin.de/~tapia/cumulants/), [(slides)](http://page.math.tu-berlin.de/~tapia/cumulants/slides/Hager-CSA21.pdf), [(video)](http://page.math.tu-berlin.de/~tapia/cumulants/videos/hager-csa21.mp4)
