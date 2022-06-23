@@ -23,7 +23,7 @@ You can find my CV here: [PDF](./paul_hager_cv.pdf).
 - C. Bayer, D. Belomestny, P. Hager, P. Pigato, J. Schoenmakers, *Randomized optimal stopping algorithms and their convergence analysis*, SIAM Journal on Financial Mathematics, 12(3) 1201–1225 (2021), ([journal](https://epubs.siam.org/doi/abs/10.1137/20M1373876), [arxiv](https://arxiv.org/abs/2002.00816))
 
 # Selected Talks
-- [Mini-Course on Machine Learning Methods in Finance @ KAUST](https://cemse.kaust.edu.sa/events/event/snsl-workshop)
+- [Mini-Course on Machine Learning Methods in Finance @ KAUST](https://cemse.kaust.edu.sa/stochnum/news/workshop-stochastic-numerics-and-statistical-learning-theory-and-applications-may-2022)
     - Lecture on *Calculation of Deep Log Signature Stopping Rules*, , 23 May 2022, [html](./talks/calculating_signature_stopping_rules.html), [notebook](./talks/calculating_signature_stopping_rules.zip), [youtube](https://www.youtube.com/watch?v=6p7u8B_1SMA)
     - Exercise Sheet on the *Simulation of fractional Brownian motion* [pdf](./talks/excersize_sheet_sampling_of_fBm.pdf)
 - Unified Signature Cumulants and Generalized Magnus Expansions, 24 Feb 2021, [Cumulants in Stochastic Analysis](http://page.math.tu-berlin.de/~tapia/cumulants/), [(slides)](http://page.math.tu-berlin.de/~tapia/cumulants/slides/Hager-CSA21.pdf), [(video)](http://page.math.tu-berlin.de/~tapia/cumulants/videos/hager-csa21.mp4)
