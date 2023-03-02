@@ -12,7 +12,7 @@ You can find my CV here: [PDF](./paul_hager_cv.pdf).
 - Fractional Brownian motion, log-correlated fields, Gaussian multiplicative chaos and their applications to volatility modelling.
 
 ## Working Papers
-- G. Fu, P. P. Hager, U. Horst. *Mean-Field Liquidation Games with Market Drop-out*. Working Paper. 2023
+- G. Fu, P. Hager, U. Horst. *Mean-Field Liquidation Games with Market Drop-out*. Working Paper. 2023
 
 # Publications
 - C. Bayer, P. Hager, S. Riedel, J. Schoenmakers, *Optimal stopping with signatures*, 03 May 2021, [arxiv](http://arxiv.org/abs/2105.00778)\
