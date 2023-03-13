@@ -12,10 +12,10 @@ You can find my CV here: [PDF](./paul_hager_cv.pdf).
 - Fractional Brownian motion, log-correlated fields, Gaussian multiplicative chaos and their applications to volatility modelling.
 
 # Preprints
-- C. Bayer, P. Hager, S. Riedel, J. Schoenmakers, *Optimal stopping with signatures*, 03 May 2021, [arxiv](http://arxiv.org/abs/2105.00778)\
-  (to appear in the *Annals of Applied Probability*)
+- G. Fu, P. Hager, U. Horst *Mean-Field Liquidation Games with Market Drop-out*, 10 March 2023, [arxiv](https://arxiv.org/abs/2303.05783)
 
 # Publications
+- C. Bayer, P. Hager, S. Riedel, J. Schoenmakers, *Optimal stopping with signatures*, Annals of Applied Probability 33 (1) 238–273 February 2023, ([journal](http://dx.doi.org/10.1214/22-AAP1814), [arxiv](http://arxiv.org/abs/2105.00778))
 - C. Bayer, D. Belomestny, P. Hager, P. Pigato, J. Schoenmakers, V. Spokoiny, *Reinforced optimal control*, Communications in Mathematical Sciences, 20(7) 1927-1949 (2022),([journal](https://dx.doi.org/10.4310/CMS.2022.v20.n7.a7), [arxiv](http://arxiv.org/abs/2011.12382))
 - P. K. Friz, P. P. Hager, N. Tapia, *Unified Signature Cumulants and Generalized Magnus Expansions*, Forum of Mathematics, Sigma, 10, E42. (2022), ([journal](https://www.doi.org/10.1017/fms.2022.20), [arxiv](https://arxiv.org/abs/2102.03345))
 - P. Hager, E. Neuman, *The multiplicative chaos of H = 0 fractional Brownian fields.*, Annals of Applied Probability, 32 (3) 2139 - 2179 June 2022, ([journal](http://dx.doi.org/10.1214/21-AAP1730), [arxiv](https://arxiv.org/abs/2008.01385))
