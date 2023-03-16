@@ -8,8 +8,8 @@ and a PhD student under the supervision of [Peter K. Friz](http://page.math.tu-b
 You can find my CV here: [PDF](./paul_hager_cv.pdf).
 
 # Research interest
-- Signatures and their applications in stochastic optimization and machine learning.
-- Fractional Brownian motion, log-correlated fields, Gaussian multiplicative chaos and their applications to volatility modelling.
+- Rough path signatures and their applications in machine learning, stochastic control, mean-field games, and calibration problems in mathematical finance.
+- Fractional Brownian motion, log-correlated fields, Gaussian multiplicative chaos, and their applications to volatility modeling.
 
 # Preprints
 - G. Fu, P. Hager, U. Horst *Mean-Field Liquidation Games with Market Drop-out*, 10 March 2023, [arxiv](https://arxiv.org/abs/2303.05783)
