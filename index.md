@@ -9,7 +9,7 @@ You can find my CV here: [PDF](./paul_hager_cv.pdf).
 
 # Research interest
 - Rough path signatures and their applications in machine learning, stochastic control, mean-field games, and calibration problems in mathematical finance.
-- Rough fractional processes, log-correlated fields, Gaussian multiplicative chaos, and their applications to volatility modeling.
+- Fractional processes, log-correlated fields, Gaussian multiplicative chaos, and their applications to volatility modeling.
 
 # Preprints
 - G. Fu, P. Hager, U. Horst *Mean-Field Liquidation Games with Market Drop-out*, 10 March 2023, [arxiv](https://arxiv.org/abs/2303.05783)
