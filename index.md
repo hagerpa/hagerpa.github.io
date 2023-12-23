@@ -12,7 +12,7 @@ You can find my CV here: [PDF](./paul_hager_cv.pdf).
 - Fractional processes, log-correlated fields, Gaussian multiplicative chaos, and their applications to volatility modeling.
 
 # Preprints
-- G. Fu, P. Hager, U. Horst *Mean-Field Liquidation Games with Market Drop-out*, 10 March 2023, [arxiv](https://arxiv.org/abs/2303.05783)
+- G. Fu, P. Hager, U. Horst *Mean-Field Liquidation Games with Market Drop-out*, 10 March 2023, [arxiv](https://arxiv.org/abs/2303.05783) (accepted at *Mathematical Fianance*)
 
 # Publications
 - C. Bayer, P. Hager, S. Riedel, J. Schoenmakers, *Optimal stopping with signatures*, Annals of Applied Probability 33 (1) 238–273 February 2023, ([journal](http://dx.doi.org/10.1214/22-AAP1814), [arxiv](http://arxiv.org/abs/2105.00778))
