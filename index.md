@@ -1,4 +1,4 @@
-![image](me_in_london.jpg){: style="float:right; width:100px; padding:10px"}
+![image](me_in_london.jpg){: style="float:right; width:150px; padding:10px"}
 
 I am a junior research group leader at Technische Universität Berlin in the field of *Stochastic Analysis and Quantitative Finance*.
 Previously, I was a postdoctoral researcher at Humboldt University of Berlin in the [Applied Financial Mathematics & Applied Stochastic Analysis](https://www.applied-financial-mathematics.de/paul-hager) research group.
