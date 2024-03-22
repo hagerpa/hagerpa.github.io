@@ -11,9 +11,10 @@ You can find my CV here: [PDF](./paul_hager_cv.pdf).
 - Fractional processes, log-correlated fields, Gaussian multiplicative chaos, and their applications to volatility modeling.
 
 # Preprints
-- G. Fu, P. Hager, U. Horst *Mean-Field Liquidation Games with Market Drop-out*, 10 March 2023, [arXiv](https://arxiv.org/abs/2303.05783) (accepted at *Mathematical Finance*)
+- G. Fu, P. Hager, U. Horst *A Mean-Field Game of Market Entry: Portfolio Liquidation with Trading Constraints*, 15 March 2024, [arXiv](https://arxiv.org/abs/2403.10441)
 
 # Publications
+- G. Fu, P. Hager, U. Horst *Mean-Field Liquidation Games with Market Drop-out*, Mathematical Finance, 15 January 2024, ([journal](https://onlinelibrary.wiley.com/doi/abs/10.1111/mafi.12429), [arXiv](https://arxiv.org/abs/2303.05783))
 - C. Bayer, P. Hager, S. Riedel, J. Schoenmakers, *Optimal stopping with signatures*, Annals of Applied Probability 33 (1) 238–273 February 2023, ([journal](http://dx.doi.org/10.1214/22-AAP1814), [arXiv](http://arxiv.org/abs/2105.00778))
 - C. Bayer, D. Belomestny, P. Hager, P. Pigato, J. Schoenmakers, V. Spokoiny, *Reinforced optimal control*, Communications in Mathematical Sciences, 20(7) 1927-1949 (2022), ([journal](https://dx.doi.org/10.4310/CMS.2022.v20.n7.a7), [arXiv](http://arxiv.org/abs/2011.12382))
 - P. K. Friz, P. P. Hager, N. Tapia, *Unified Signature Cumulants and Generalized Magnus Expansions*, Forum of Mathematics, Sigma, 10, E42. (2022), ([journal](https://www.doi.org/10.1017/fms.2022.20), [arXiv](https://arxiv.org/abs/2102.03345))
