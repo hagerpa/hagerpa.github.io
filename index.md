@@ -11,6 +11,7 @@ You can find my CV here: [PDF](./paul_hager_cv.pdf).
 - Fractional processes, log-correlated fields, Gaussian multiplicative chaos, and their applications to volatility modeling.
 
 # Preprints
+- P. Bank, C. Bayer, P. P. Hager, S. Riedel, T. Nauen *Stochastic Control with Signatures*, 4 June 2024, [arXiv](https://arxiv.org/abs/2406.01585)
 - G. Fu, P. Hager, U. Horst *A Mean-Field Game of Market Entry: Portfolio Liquidation with Trading Constraints*, 15 March 2024, [arXiv](https://arxiv.org/abs/2403.10441)
 
 # Publications
