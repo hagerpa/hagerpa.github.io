@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paul P. Hager</title>
+<meta name="description" content="Paul P. Hager, University of Vienna: open-source Python packages for rough volatility, signatures and signature kernels.">
+<link rel="canonical" href="https://hagerpa.github.io/">
+<style>
+  :root {
+    color-scheme: light dark;
+    --rule: #d5d2ce;
+    --tile: #ffffff;
+    --tile-2: #f6f5f3;
+    --hover: #f4f3f1;
+    --text: #1c1917;
+    --muted: #57534e;
+    --focus: #0b5d6b;
+    --fbm-line: #8f86a3;  /* live fBm: path and its moving head */
+    --fbm-head: #4527a0;
+    --g: 1px;            /* hairline rules */
+    --pad: clamp(1.25rem, 5vmin - .9rem, 2.5rem);  /* shrinks on short windows too */
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.5 11.5l7-7M5.5 4.5h6v6'/%3E%3C/svg%3E");
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --rule: #3b3835;
+      --tile: #1c1b19;
+      --tile-2: #161513;
+      --hover: #252321;
+      --text: #f5f5f4;
+      --muted: #a8a29e;
+      --focus: #6cc7d3;
+      --fbm-line: #8a82a0;
+      --fbm-head: #b9a7f5;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  /* auto rows grow with content; spare viewport height goes to header and main */
+  body {
+    margin: 0; min-height: 100vh; min-height: 100dvh;
+    display: grid; gap: var(--g);
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-rows: auto auto max-content;
+    background: var(--rule); color: var(--text); overflow-wrap: break-word;
+    font: 1rem/1.55 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  a { color: inherit; }
+  a:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 2px; }
+
+  header, main, footer { grid-column: 1 / -1; }
+  header { display: grid; gap: var(--g); grid-template-columns: subgrid; }
+
+  .hero {
+    grid-column: span 12; display: flex; flex-direction: column; justify-content: space-between;
+    gap: 1.75rem; padding: var(--pad); background: var(--tile);
+  }
+  .hero h1 {
+    margin: 0; font-size: clamp(2.4rem, min(5vw, 8.5vh), 5.5rem);
+    line-height: 1; letter-spacing: -.025em; font-weight: 700;
+  }
+  .hero p {
+    margin: 0; max-width: 33em; color: var(--muted);
+    font-size: clamp(1rem, .85rem + .4vw, 1.25rem); line-height: 1.5; text-wrap: pretty;
+  }
+
+  /* live fBm path (H = 0.1) between name and affiliation: bleeds left, ends at the text edge */
+  .hero { position: relative; gap: .875rem; }  /* two gaps around the chart add up to the single gap without it */
+  .fbm { position: relative; flex: 1 1 0; min-height: clamp(4.5rem, 11vw, 5.75rem); margin-left: calc(var(--pad) * -1); }
+  @media (min-width: 64em) { .fbm { min-height: 0; max-height: 17rem; } }  /* desktop: only spare height, never a scroll */
+  .fbm svg { position: absolute; inset: 0; width: 100%; height: 100%;
+    -webkit-mask: linear-gradient(90deg, transparent, #000 12%); mask: linear-gradient(90deg, transparent, #000 12%); }
+  .fbm path { fill: none; stroke: var(--fbm-line); stroke-width: 1.1; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+  .fbm i {
+    position: absolute; left: 100%; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%;
+    background: var(--fbm-head); box-shadow: 0 0 0 4.5px color-mix(in srgb, var(--fbm-head) 15%, transparent);
+  }
+  /* caption and play/pause, top right of the tile */
+  .fbm-ctl {
+    position: absolute; right: var(--pad); top: calc(var(--pad) + .15 * clamp(2.4rem, min(5vw, 8.5vh), 5.5rem) - .45rem);
+    display: flex; align-items: center; gap: .55rem; font: .72rem/1.4 var(--mono); color: var(--muted);
+  }
+  .fbm-ctl button {
+    display: grid; place-items: center; width: 1.6rem; height: 1.6rem; padding: 0; cursor: pointer;
+    border: 1px solid var(--rule); border-radius: 50%; background: var(--tile); color: var(--muted);
+  }
+  .fbm-ctl button:hover { color: var(--text); border-color: var(--muted); }
+  .fbm-ctl button:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  .fbm-ctl button[hidden] { display: none; }
+  .fbm-ctl svg { width: .62rem; height: .62rem; fill: currentColor; }
+  .fbm-ctl .play, .fbm-ctl[data-state="paused"] .pause { display: none; }
+  .fbm-ctl[data-state="paused"] .play { display: inline; }
+  @media (max-width: 30em) { .fbm-ctl { font-size: .68rem; } }
+  @media (max-width: 22.4em) { .fbm-ctl span { display: none; } }
+  @media (forced-colors: active) { .fbm path { stroke: GrayText; } .fbm i { background: CanvasText; } }
+
+  .links {
+    grid-column: span 12; display: grid; gap: var(--g); grid-template-columns: subgrid;
+    margin: 0; padding: 0; list-style: none;
+  }
+  .links li { grid-column: span 6; display: grid; grid-template-columns: minmax(0, 1fr); --b: var(--brand); }
+  @media (prefers-color-scheme: dark) { .links li { --b: var(--brand-d); } }  /* lighter brand colours */
+  /* icon top left, arrow top right, label and address at the bottom */
+  .links a {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto 1fr auto auto;
+    column-gap: 1rem; min-height: min(6.5rem, 14vh);
+    padding: calc(var(--pad) * .8) var(--pad); background: var(--tile);
+    text-decoration: none; font-weight: 600; font-size: clamp(1.02rem, .9rem + .35vw, 1.3rem); line-height: 1.25;
+  }
+  .links a:hover { background: color-mix(in oklab, var(--b) 12%, var(--tile)); }
+  .links a:focus-visible { outline-offset: -4px; border-radius: 0; }
+  .links .label { grid-area: 3 / 1 / auto / -1; margin-top: .6rem; }
+  .links .hint { grid-area: 4 / 1 / auto / -1; margin-top: .15rem;
+    font: 400 clamp(.7rem, .55rem + .5vw, .8rem)/1.4 var(--mono); color: var(--muted); }
+  .links .ico { grid-area: 1 / 1; width: clamp(1.6rem, 1.1rem + 1.1vw, 2.4rem); height: auto; aspect-ratio: 1; fill: var(--b); }
+  .links a:hover .ico { transform: scale(1.06); }
+
+  /* arrow glyph, top right */
+  .links a::before, .pkg::before {
+    content: ""; width: 1.15rem; height: 1.15rem; flex: none; background: var(--muted);
+    -webkit-mask: var(--arrow) center / contain no-repeat; mask: var(--arrow) center / contain no-repeat;
+  }
+  .links a::before { grid-area: 1 / 2; }  /* arrow top right */
+  .links a:hover::before { background: var(--text); transform: translate(2px, -2px); }
+
+  main { display: grid; gap: var(--g); grid-template-rows: max-content auto; }
+  .strip, footer {
+    display: flex; flex-wrap: wrap; align-content: center; align-items: baseline; gap: .2rem 1rem;
+    min-height: 3rem; padding: .6rem var(--pad); background: var(--tile-2);
+  }
+  .strip h2 { margin: 0; font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; }
+  .strip p { margin: 0; color: var(--muted); font-size: .9rem; }
+  footer { color: var(--muted); font-size: .85rem; }
+
+  .pkgs { display: grid; gap: var(--g); grid-template-columns: minmax(0, 1fr); }
+  /* colour fields: --to stops where white text keeps AA contrast */
+  .pkg {
+    position: relative; display: flex; flex-direction: column; align-items: flex-start;
+    padding: var(--pad); color: #fff;
+    background: linear-gradient(to bottom right, var(--from), var(--to));
+  }
+  .pkg::before { position: absolute; top: var(--pad); right: var(--pad); background: #fff; opacity: .75; }
+  .pkg:hover::before { opacity: 1; transform: translate(2px, -2px); }
+  .pkg img {
+    width: 3rem; height: auto; margin-bottom: 1.1rem; border-radius: 22%;
+    box-shadow: 0 0 0 1px rgb(255 255 255 / .22), 0 .7rem 1.3rem -.7rem rgb(0 0 0 / .55);
+  }
+  .pkg:hover img { transform: translateY(-2px); }
+  .pkg h3 { margin: 0; font-size: clamp(1.1rem, .95rem + .4vw, 1.5rem); line-height: 1.3; letter-spacing: -.01em; }
+  .pkg h3 a { text-decoration: none; }
+  .pkg:hover h3 a { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .15em; }
+  .pkg h3 a::after { content: ""; position: absolute; inset: 0; }  /* whole tile is the link */
+  .pkg h3 a:focus-visible { outline: none; }
+  .pkg h3 a:focus-visible::after { outline: 2px solid #fff; outline-offset: -6px; }
+  .pkg p {
+    margin: .35rem 0 1.25rem; max-width: 30em; color: #fff;
+    font-size: clamp(.94rem, .85rem + .2vw, 1.06rem); line-height: 1.5;
+  }
+
+  /* code and chips sit above the stretched link */
+  .pkg code, .chips { position: relative; z-index: 1; }
+  .pkg code {
+    margin-top: auto; padding: .15rem .5rem; border-radius: .3rem; user-select: all;
+    background: rgb(0 0 0 / .24);
+    font: .82rem/1.5 var(--mono);
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .6rem; }
+  .chips a {
+    padding: .1rem .55rem; border: 1px solid rgb(255 255 255 / .65); border-radius: .3rem;
+    text-decoration: none; font-size: .8rem;
+  }
+  .chips a:hover { background: #fff; color: var(--from); }
+  .chips a:focus-visible { outline-color: #fff; }
+
+  /* tablet: pairs; an odd last package takes the full row */
+  @media (44em <= width < 64em) {
+    .pkgs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .pkg:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  }
+  /* desktop: everything on one screen */
+  @media (min-width: 64em) {
+    .hero, .links { grid-column: span 6; }
+    .links li { grid-column: span 3; }
+    /* one column per package; subgrid rows line up name, text, install line and chips */
+    .pkgs {
+      grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); grid-template-columns: none;
+      grid-template-rows: auto auto 1fr auto auto; row-gap: 0;
+    }
+    .pkg { display: grid; grid-row: 1 / -1; grid-template-rows: subgrid; justify-items: start; }
+    .pkg img { width: clamp(2.75rem, 6.5vh, 4.25rem); margin-bottom: clamp(1rem, 3vh, 2rem); }
+    .pkg p { align-self: start; }
+  }
+  /* Windows contrast themes repaint the gap colour away: draw the rules as outlines */
+  @media (forced-colors: active) {
+    .hero, .links a, .strip, .pkg, footer { outline: 1px solid CanvasText; outline-offset: -1px; }
+    .links a::before, .pkg::before { forced-color-adjust: none; background: CanvasText; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .links a, .pkg, .chips a { transition: background-color .15s; }
+    .links .ico { transition: transform .15s; }
+    .links a::before, .pkg::before { transition: transform .15s, background-color .15s, opacity .15s; }
+    .pkg img { transition: transform .15s; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hero" data-tile="name">
+    <h1>Paul P. Hager</h1>
+    <div class="fbm" aria-hidden="true"><svg viewBox="0 0 346 1000" preserveAspectRatio="none" focusable="false"><path d="M0 460.4L1 578.2L2 441.3L3 563.8L4 521.8L5 431.6L6 529.5L7 348.9L8 448.6L9 653.5L10 512.5L11 541.1L12 619.7L13 778.7L14 689.1L15 532.2L16 432.9L17 643.2L18 454.6L19 422.7L20 600.1L21 557.6L22 429.3L23 509.8L24 542.6L25 341.4L26 488.8L27 476.9L28 379.5L29 449.1L30 489.7L31 413.1L32 688.5L33 334.4L34 498.0L35 394.8L36 454.4L37 537.3L38 503.2L39 509.1L40 594.2L41 651.7L42 685.3L43 713.2L44 734.6L45 657.3L46 480.6L47 764.6L48 607.3L49 616.2L50 659.1L51 725.4L52 685.7L53 537.6L54 682.6L55 468.6L56 339.5L57 498.2L58 454.9L59 595.3L60 450.9L61 353.1L62 639.8L63 416.8L64 557.0L65 600.9L66 537.1L67 643.8L68 788.2L69 730.4L70 480.1L71 338.7L72 535.7L73 309.0L74 444.3L75 459.1L76 532.7L77 449.9L78 452.6L79 503.6L80 248.9L81 415.2L82 278.6L83 417.2L84 596.2L85 513.5L86 471.1L87 211.6L88 232.7L89 379.8L90 344.0L91 441.6L92 582.9L93 553.6L94 486.7L95 529.4L96 485.4L97 594.5L98 549.6L99 510.0L100 573.5L101 559.2L102 616.1L103 353.2L104 426.7L105 477.5L106 540.2L107 542.8L108 284.6L109 554.9L110 645.3L111 456.2L112 443.2L113 425.7L114 464.9L115 474.1L116 303.7L117 295.0L118 326.6L119 493.4L120 369.6L121 308.9L122 218.0L123 247.3L124 162.7L125 257.7L126 215.0L127 60.0L128 175.6L129 201.3L130 246.8L131 497.4L132 323.1L133 372.3L134 483.1L135 458.5L136 414.8L137 437.5L138 434.1L139 315.9L140 519.0L141 465.8L142 451.6L143 336.0L144 359.8L145 421.1L146 160.1L147 331.2L148 275.9L149 296.7L150 419.7L151 229.3L152 467.4L153 426.7L154 571.1L155 589.5L156 649.3L157 589.4L158 684.2L159 642.5L160 519.1L161 610.8L162 412.6L163 573.7L164 519.3L165 579.8L166 661.7L167 595.4L168 674.4L169 597.0L170 658.8L171 718.0L172 577.0L173 548.8L174 668.2L175 651.6L176 625.0L177 674.8L178 732.0L179 511.4L180 512.9L181 451.5L182 560.3L183 711.3L184 611.3L185 659.0L186 454.0L187 271.8L188 339.5L189 604.6L190 445.3L191 560.0L192 509.0L193 461.2L194 552.5L195 940.0L196 751.7L197 531.3L198 369.9L199 455.5L200 391.1L201 479.4L202 513.2L203 458.5L204 305.3L205 438.6L206 441.9L207 510.0L208 326.1L209 297.8L210 438.6L211 505.3L212 482.4L213 513.9L214 319.5L215 454.0L216 478.1L217 507.6L218 488.6L219 531.2L220 597.1L221 534.3L222 717.9L223 556.5L224 695.5L225 593.3L226 712.6L227 728.5L228 738.7L229 723.4L230 793.1L231 723.5L232 864.5L233 589.8L234 831.1L235 825.8L236 850.0L237 756.7L238 673.2L239 598.8L240 324.0L241 312.8L242 425.4L243 662.0L244 580.7L245 591.6L246 371.8L247 533.2L248 462.0L249 608.1L250 680.4L251 514.6L252 494.1L253 446.7L254 541.8L255 496.9L256 477.2L257 514.5L258 594.9L259 543.3L260 542.3L261 528.2L262 534.6L263 406.2L264 511.9L265 616.2L266 447.4L267 535.0L268 335.6L269 510.6L270 574.1L271 697.7L272 622.3L273 709.6L274 493.6L275 555.7L276 407.4L277 535.3L278 498.5L279 509.1L280 592.3L281 572.0L282 491.1L283 550.0L284 492.4L285 325.7L286 617.6L287 540.9L288 667.8L289 357.0L290 467.0L291 469.5L292 417.5L293 575.3L294 483.6L295 558.6L296 503.0L297 406.9L298 468.7L299 486.5L300 493.8L301 525.6L302 394.3L303 493.7L304 468.1L305 354.0L306 576.6L307 520.3L308 632.3L309 235.3L310 502.8L311 402.4L312 520.2L313 418.3L314 647.1L315 612.3L316 785.5L317 691.3L318 469.6L319 527.7L320 631.9L321 565.3L322 661.6L323 626.9L324 612.4L325 583.4L326 440.3L327 591.5L328 658.1L329 660.9L330 381.4L331 535.0L332 540.4L333 417.4L334 462.2L335 520.0L336 487.1L337 532.2L338 576.5L339 483.0L340 681.9L341 536.7L342 733.1L343 494.0L344 611.4L345 808.6L346 691.3"/></svg><i style="top: 69.13%"></i></div>
+    <div class="fbm-ctl" data-state="paused"><span aria-hidden="true" title="Fractional Brownian motion with Hurst exponent 0.1, simulated live in your browser: each step is drawn exactly given the whole past (Hosking / Durbin-Levinson).">fBm, H = 0.1</span><button type="button" hidden aria-label="Continue the animation" title="Continue"><svg viewBox="0 0 10 10" aria-hidden="true"><path class="pause" d="M2 1h2v8H2zM6 1h2v8H6z"/><path class="play" d="M2.5 1 9 5l-6.5 4z"/></svg></button></div>
+    <p>Assistant Professor in Mathematical Finance and Machine Learning at the
+      Department of Statistics and Operations Research, University of Vienna.</p>
+    <script>
+(function () {
+  // Exact fBm sampling: each fGn increment is drawn from its Gaussian law given the whole past
+  // (Hosking / Durbin-Levinson), so the path stays exact however long it runs.
+  var H = .1, cap = 1024, gam, X, phi, tmp, n = 0, v = 1, B = 0, u = 7, spare = null;
+  function alloc(c) {
+    var g = new Float64Array(c), x = new Float64Array(c), p = new Float64Array(c), k;
+    if (gam) { x.set(X); p.set(phi); }
+    g[0] = 1;   // fGn autocovariance, Var = 1 per step
+    for (k = 1; k < c; k++) g[k] = .5 * (Math.pow(k + 1, 2 * H) - 2 * Math.pow(k, 2 * H) + Math.pow(k - 1, 2 * H));
+    gam = g; X = x; phi = p; tmp = new Float64Array(c); cap = c;
+  }
+  function rnd() {   // mulberry32
+    u = u + 0x6D2B79F5 | 0;
+    var t = Math.imul(u ^ u >>> 15, 1 | u);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  }
+  function gauss() {   // Box-Muller
+    if (spare !== null) { var s = spare; spare = null; return s; }
+    var r = Math.sqrt(-2 * Math.log(1 - rnd())), th = 2 * Math.PI * rnd();
+    spare = r * Math.sin(th);
+    return r * Math.cos(th);
+  }
+  function step() {   // appends X_n and returns B_{n+1} = X_0 + ... + X_n
+    if (n + 1 >= cap) alloc(2 * cap);
+    var m = 0, d, k;
+    if (n > 0) {
+      d = gam[n];
+      for (k = 1; k < n; k++) d -= phi[k] * gam[n - k];
+      d /= v;   // phi_{n,n}
+      for (k = 1; k < n; k++) tmp[k] = phi[k] - d * phi[n - k];
+      for (k = 1; k < n; k++) phi[k] = tmp[k];
+      phi[n] = d;
+      v *= 1 - d * d;   // conditional variance
+      for (k = 1; k <= n; k++) m += phi[k] * X[n - k];
+    }
+    X[n] = m + Math.sqrt(v) * gauss();
+    B += X[n++];
+    return B;
+  }
+  alloc(cap);
+
+  var hero = document.currentScript.parentNode, box = hero.querySelector('.fbm'), svg = box.firstElementChild,
+    line = svg.firstElementChild, hd = box.lastElementChild, ctl = hero.querySelector('.fbm-ctl'),
+    btn = ctl.querySelector('button'), still = matchMedia('(prefers-reduced-motion: reduce)'),
+    RATE = 20, AUTO = 5000, NMAX = 520, P = [], N = 0, lo, hi, run = false, budget = AUTO,
+    seen = 1, raf = 0, last = 0, acc = 0, k;
+  function push(b) { P.push(b); if (P.length > NMAX) P.shift(); }
+  function draw(reset) {
+    var c = Math.min(N, P.length), i = P.length - c, mn = 1 / 0, mx = -mn, d = '', y, m, h;
+    for (k = i; k < P.length; k++) { mn = Math.min(mn, P[k]); mx = Math.max(mx, P[k]); }
+    h = Math.max(mx - mn, 1) / 2; m = (mn + mx) / 2;
+    if (reset) { lo = m - h; hi = m + h; }
+    else {   // widen at once, narrow gently
+      lo = m - h < lo ? m - h : lo + (m - h - lo) * .05;
+      hi = m + h > hi ? m + h : hi + (m + h - hi) * .05;
+    }
+    for (k = 0; k < c; k++) { y = (60 + 880 * (hi - P[i + k]) / (hi - lo)).toFixed(1); d += (k ? 'L' : 'M') + k + ' ' + y; }
+    line.setAttribute('d', d);
+    hd.style.top = y / 10 + '%';
+  }
+  function fit() {   // about 2 px per step at any width
+    var c = Math.max(120, Math.min(NMAX, Math.round(box.clientWidth / 2)));
+    if (c !== N) { N = c; svg.setAttribute('viewBox', '0 0 ' + (c - 1) + ' 1000'); draw(1); }
+  }
+  function frame(t) {   // RATE steps per second; the 5 s budget only runs down while visible
+    raf = 0;
+    if (!(run && seen && !document.hidden)) { last = 0; return; }
+    if (last) { var dt = Math.min(t - last, 100); acc += dt; budget -= dt; }
+    last = t;
+    var due = Math.floor(acc * RATE / 1000);
+    if (due) { acc -= due * 1000 / RATE; while (due--) push(step()); draw(); }
+    if (budget <= 0) { set(false); return; }
+    raf = requestAnimationFrame(frame);
+  }
+  function sync() { if (run && seen && !document.hidden && !raf) { last = 0; raf = requestAnimationFrame(frame); } }
+  function set(on) {
+    run = on;
+    ctl.dataset.state = on ? 'running' : 'paused';
+    btn.setAttribute('aria-label', on ? 'Pause the animation' : 'Continue the animation');
+    btn.title = on ? 'Pause' : 'Continue';
+    if (on) sync(); else if (raf) { cancelAnimationFrame(raf); raf = 0; }
+  }
+  for (k = 0; k < NMAX; k++) push(step());   // seeded history fills the window
+  u = (window.crypto ? crypto.getRandomValues(new Uint32Array(1))[0] : Math.random() * 4294967296) | 0;   // fresh future
+  fit();
+  if (window.ResizeObserver) new ResizeObserver(fit).observe(box);
+  if (window.IntersectionObserver) new IntersectionObserver(function (e) { seen = e[e.length - 1].isIntersecting; sync(); }).observe(box);
+  document.addEventListener('visibilitychange', sync);
+  btn.addEventListener('click', function () { if (run) set(false); else { budget = 1 / 0; set(true); } });
+  btn.hidden = false;
+  set(!still.matches);   // autoplay for 5 s unless reduced motion is on
+})();
+    </script>
+  </div>
+  <ul class="links" role="list">
+    <li data-tile="homepage" style="--brand: #0063a6; --brand-d: #6cb4ea"><a href="https://homepage.univie.ac.at/paul.peter.hager/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.6 1.5 7v1.9h21V7zM3.6 10.4h2.8v7.4H3.6zm4.7 0h2.8v7.4H8.3zm4.6 0h2.8v7.4h-2.8zm4.7 0h2.8v7.4h-2.8zM1.5 19.3h21v2.6h-21z"/></svg><span class="label">Academic homepage</span> <span class="hint" aria-hidden="true">homepage.univie.ac.at</span></a></li>
+    <li data-tile="scholar" style="--brand: #4285f4; --brand-d: #8ab4f8"><a href="https://scholar.google.com/citations?user=Gyxk54EAAAAJ"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.242 13.769 0 9.5 12 0l12 9.5-5.242 4.269C17.548 11.249 14.978 9.5 12 9.5c-2.977 0-5.548 1.748-6.758 4.269M12 10a7 7 0 1 0 0 14 7 7 0 0 0 0-14"/></svg><span class="label">Google Scholar</span> <span class="hint" aria-hidden="true">scholar.google.com</span></a></li>
+    <li data-tile="github" style="--brand: #181717; --brand-d: #f0f0f0"><a href="https://github.com/hagerpa"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg><span class="label">GitHub</span> <span class="hint" aria-hidden="true">github.com/hagerpa</span></a></li>
+    <li data-tile="orcid" style="--brand: #a6ce39; --brand-d: #a6ce39"><a href="https://orcid.org/0000-0001-8399-4255"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0M7.369 4.378c.525 0 .947.431.947.947s-.422.947-.947.947a.95.95 0 0 1-.947-.947c0-.525.422-.947.947-.947m-.722 3.038h1.444v10.041H6.647zm3.562 0h3.9c3.712 0 5.344 2.653 5.344 5.025 0 2.578-2.016 5.025-5.325 5.025h-3.919zm1.444 1.303v7.444h2.297c3.272 0 4.022-2.484 4.022-3.722 0-2.016-1.284-3.722-4.097-3.722z"/></svg><span class="label">ORCID</span> <span class="hint" aria-hidden="true">0000-0001-8399-4255</span></a></li>
+  </ul>
+</header>
+
+<main>
+  <div class="strip" data-tile="software">
+    <h2>Software</h2>
+    <p>Open-source Python packages, all installable from PyPI.</p>
+  </div>
+
+  <div class="pkgs">
+
+    <article class="pkg" data-tile="tensordev" style="--from: #073f49; --to: #17707d">
+      <img src="logos/tensordev.svg" alt="" width="56" height="56">
+      <h3><a href="https://github.com/hagerpa/tensordev">tensordev</a></h3>
+      <p>JAX tensor algebra for signatures, Volterra signatures, free developments and signature kernels.</p>
+      <code>pip install tensordev</code>
+      <nav class="chips" aria-label="tensordev links">
+        <a href="https://github.com/hagerpa/tensordev">GitHub</a>
+        <a href="https://pypi.org/project/tensordev/">PyPI</a>
+      </nav>
+    </article>
+
+    <article class="pkg" data-tile="levymmd" style="--from: #1b4332; --to: #317255">
+      <img src="logos/levymmd.svg" alt="" width="56" height="56">
+      <h3><a href="https://github.com/hagerpa/levymmd">levymmd</a></h3>
+      <p>Expected signature kernels and maximum mean discrepancies for inhomogeneous Lévy processes.</p>
+      <code>pip install levymmd</code>
+      <nav class="chips" aria-label="levymmd links">
+        <a href="https://github.com/hagerpa/levymmd">GitHub</a>
+        <a href="https://pypi.org/project/levymmd/">PyPI</a>
+        <a href="https://arxiv.org/abs/2509.07893">Paper</a>
+      </nav>
+    </article>
+
+    <article class="pkg" data-tile="roughprix" style="--from: #4527a0; --to: #7556bb">
+      <img src="logos/roughprix.svg" alt="" width="56" height="56">
+      <h3><a href="https://hagerpa.github.io/roughprix/">roughprix</a></h3>
+      <p>European option pricing in the rough Heston model, with a Taylor expansion in the Hurst exponent H.</p>
+      <code>pip install roughprix</code>
+      <nav class="chips" aria-label="roughprix links">
+        <a href="https://hagerpa.github.io/roughprix/">Docs</a>
+        <a href="https://github.com/hagerpa/roughprix">GitHub</a>
+        <a href="https://pypi.org/project/roughprix/">PyPI</a>
+        <a href="https://arxiv.org/abs/2606.16619">Paper</a>
+      </nav>
+    </article>
+
+    <article class="pkg" data-tile="locsvol" style="--from: #16324f; --to: #2c69a6">
+      <img src="logos/locsvol.svg" alt="" width="56" height="56">
+      <h3><a href="https://github.com/hagerpa/locsvol">locsvol</a></h3>
+      <p>Calibration of local stochastic volatility models by fixed-point iteration.</p>
+      <code>pip install locsvol</code>
+      <nav class="chips" aria-label="locsvol links">
+        <a href="https://github.com/hagerpa/locsvol">GitHub</a>
+        <a href="https://pypi.org/project/locsvol/">PyPI</a>
+      </nav>
+    </article>
+
+  </div>
+</main>
+
+<footer data-tile="footer">
+  <span>© Paul P. Hager · <a href="impressum">Impressum</a> · <a href="private_policy">Datenschutz</a></span>
+</footer>
+
+</body>
+</html>
