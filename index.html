@@ -16,8 +16,10 @@
     --text: #1c1917;
     --muted: #57534e;
     --focus: #0b5d6b;
-    --fbm-line: #8f86a3;  /* live fBm: path and its moving head */
+    --fbm-line: #8f86a3;  /* figure in the name tile: path and its head */
     --fbm-head: #4527a0;
+    --fig-pos: #ff7a50;   /* Lévy area and signature: positive, negative */
+    --fig-neg: #3fb5c4;
     --g: 1px;            /* hairline rules */
     --pad: clamp(1.25rem, 5vmin - .9rem, 2.5rem);  /* shrinks on short windows too */
     --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -34,6 +36,8 @@
       --focus: #6cc7d3;
       --fbm-line: #8a82a0;
       --fbm-head: #b9a7f5;
+      --fig-pos: #ff7f5c;
+      --fig-neg: #4fc3d1;
     }
   }
 
@@ -54,6 +58,7 @@
   header, main, footer { grid-column: 1 / -1; }
   header { display: grid; gap: var(--g); grid-template-columns: subgrid; }
 
+  /* name tile: the same bytes on both pages, down to "end of name tile" */
   .hero {
     grid-column: span 12; display: flex; flex-direction: column; justify-content: space-between;
     gap: 1.75rem; padding: var(--pad); background: var(--tile);
@@ -67,16 +72,38 @@
     font-size: clamp(1rem, .85rem + .4vw, 1.25rem); line-height: 1.5; text-wrap: pretty;
   }
 
-  /* live fBm path (H = 0.1) between name and affiliation: bleeds left, ends at the text edge */
+  /* figure between name and affiliation, one per visit: a live fBm path (H = 0.1) that bleeds left and ends
+     at the text edge, the Lévy area of a planar BM, or a time-augmented fBm with its signature */
   .hero { position: relative; gap: .875rem; }  /* two gaps around the chart add up to the single gap without it */
   .fbm { position: relative; flex: 1 1 0; min-height: clamp(4.5rem, 11vw, 5.75rem); margin-left: calc(var(--pad) * -1); }
   @media (min-width: 64em) { .fbm { min-height: 0; max-height: 17rem; } }  /* desktop: only spare height, never a scroll */
-  .fbm svg { position: absolute; inset: 0; width: 100%; height: 100%;
+  .walk { position: absolute; inset: 0; width: 100%; height: 100%;
     -webkit-mask: linear-gradient(90deg, transparent, #000 12%); mask: linear-gradient(90deg, transparent, #000 12%); }
-  .fbm path { fill: none; stroke: var(--fbm-line); stroke-width: 1.1; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+  .walk path { fill: none; stroke: var(--fbm-line); stroke-width: 1.1; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
   .fbm i {
     position: absolute; left: 100%; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%;
     background: var(--fbm-head); box-shadow: 0 0 0 4.5px color-mix(in srgb, var(--fbm-head) 15%, transparent);
+  }
+  /* Lévy area and signature: laid out in px by the script, static until the pointer scrubs t over the plot
+     (.hit, the plot's band); elsewhere the box ignores the pointer */
+  .fig { position: absolute; overflow: visible; pointer-events: none; touch-action: pan-y pinch-zoom; }
+  .fig .hit { fill: none; stroke: none; pointer-events: all; cursor: crosshair; }
+  .fig .line, .fig .rest, .fig .chord { fill: none; stroke-linejoin: round; }
+  .fig .line { stroke: var(--fbm-line); }
+  .fig .rest { stroke: var(--fbm-line); stroke-opacity: .3; }
+  .fig .chord { stroke: var(--muted); stroke-dasharray: 3 3; }
+  .fig .x0 { fill: var(--tile); stroke: var(--fbm-line); stroke-width: 1.5; }
+  .fig .x1, .fig .halo { fill: var(--fbm-head); }
+  .fig .halo { fill-opacity: .15; }
+  /* faces by winding number w: |w| layers of opacity a, i.e. 1 - (1 - a)^|w|; cells by sign and size */
+  .fig .pos, .fig .p { fill: var(--fig-pos); }
+  .fig .neg, .fig .n { fill: var(--fig-neg); }
+  .fig .w1 { fill-opacity: .3; } .fig .w2 { fill-opacity: .51; } .fig .w3 { fill-opacity: .66; } .fig .w4 { fill-opacity: .76; }
+  .fig rect { fill-opacity: calc(.6 * var(--a)); stroke: var(--rule); shape-rendering: crispEdges; }  /* --a = |entry| / level max */
+  .fig text { font-family: var(--mono); fill: var(--text); fill-opacity: .62; text-anchor: middle; dominant-baseline: central; }
+  @media (prefers-color-scheme: dark) {
+    .fig .w1 { fill-opacity: .25; } .fig .w2 { fill-opacity: .44; } .fig .w3 { fill-opacity: .58; } .fig .w4 { fill-opacity: .68; }
+    .fig text { fill-opacity: 1; }
   }
   /* caption and play/pause, top right of the tile */
   .fbm-ctl {
@@ -93,9 +120,20 @@
   .fbm-ctl svg { width: .62rem; height: .62rem; fill: currentColor; }
   .fbm-ctl .play, .fbm-ctl[data-state="paused"] .pause { display: none; }
   .fbm-ctl[data-state="paused"] .play { display: inline; }
-  @media (max-width: 30em) { .fbm-ctl { font-size: .68rem; } }
+  .fbm-ctl > span { text-align: right; }
+  .fbm-ctl i { font-style: normal; }
+  .fbm-ctl span span { white-space: nowrap; }
+  @media (max-width: 30em) {
+    .fbm-ctl { font-size: .68rem; }
+    .fbm-ctl span span { display: block; } .fbm-ctl i { display: none; }  /* two lines beside the name */
+  }
   @media (max-width: 22.4em) { .fbm-ctl span { display: none; } }
-  @media (forced-colors: active) { .fbm path { stroke: GrayText; } .fbm i { background: CanvasText; } }
+  @media (forced-colors: active) {
+    .walk path, .fig .rest, .fig .chord, .fig rect { stroke: GrayText; } .fbm i { background: CanvasText; }
+    .fig .line, .fig .x0 { stroke: CanvasText; } .fig .x0 { fill: Canvas; } .fig .x1, .fig .halo, .fig text { fill: CanvasText; }
+    .fig .pos, .fig .p { fill: Highlight; } .fig .neg, .fig .n { fill: GrayText; }
+  }
+  /* end of name tile */
 
   .links {
     grid-column: span 12; display: grid; gap: var(--g); grid-template-columns: subgrid;
@@ -211,103 +249,359 @@
 <header>
   <div class="hero" data-tile="name">
     <h1>Paul P. Hager</h1>
-    <div class="fbm" aria-hidden="true"><svg viewBox="0 0 346 1000" preserveAspectRatio="none" focusable="false"><path d="M0 460.4L1 578.2L2 441.3L3 563.8L4 521.8L5 431.6L6 529.5L7 348.9L8 448.6L9 653.5L10 512.5L11 541.1L12 619.7L13 778.7L14 689.1L15 532.2L16 432.9L17 643.2L18 454.6L19 422.7L20 600.1L21 557.6L22 429.3L23 509.8L24 542.6L25 341.4L26 488.8L27 476.9L28 379.5L29 449.1L30 489.7L31 413.1L32 688.5L33 334.4L34 498.0L35 394.8L36 454.4L37 537.3L38 503.2L39 509.1L40 594.2L41 651.7L42 685.3L43 713.2L44 734.6L45 657.3L46 480.6L47 764.6L48 607.3L49 616.2L50 659.1L51 725.4L52 685.7L53 537.6L54 682.6L55 468.6L56 339.5L57 498.2L58 454.9L59 595.3L60 450.9L61 353.1L62 639.8L63 416.8L64 557.0L65 600.9L66 537.1L67 643.8L68 788.2L69 730.4L70 480.1L71 338.7L72 535.7L73 309.0L74 444.3L75 459.1L76 532.7L77 449.9L78 452.6L79 503.6L80 248.9L81 415.2L82 278.6L83 417.2L84 596.2L85 513.5L86 471.1L87 211.6L88 232.7L89 379.8L90 344.0L91 441.6L92 582.9L93 553.6L94 486.7L95 529.4L96 485.4L97 594.5L98 549.6L99 510.0L100 573.5L101 559.2L102 616.1L103 353.2L104 426.7L105 477.5L106 540.2L107 542.8L108 284.6L109 554.9L110 645.3L111 456.2L112 443.2L113 425.7L114 464.9L115 474.1L116 303.7L117 295.0L118 326.6L119 493.4L120 369.6L121 308.9L122 218.0L123 247.3L124 162.7L125 257.7L126 215.0L127 60.0L128 175.6L129 201.3L130 246.8L131 497.4L132 323.1L133 372.3L134 483.1L135 458.5L136 414.8L137 437.5L138 434.1L139 315.9L140 519.0L141 465.8L142 451.6L143 336.0L144 359.8L145 421.1L146 160.1L147 331.2L148 275.9L149 296.7L150 419.7L151 229.3L152 467.4L153 426.7L154 571.1L155 589.5L156 649.3L157 589.4L158 684.2L159 642.5L160 519.1L161 610.8L162 412.6L163 573.7L164 519.3L165 579.8L166 661.7L167 595.4L168 674.4L169 597.0L170 658.8L171 718.0L172 577.0L173 548.8L174 668.2L175 651.6L176 625.0L177 674.8L178 732.0L179 511.4L180 512.9L181 451.5L182 560.3L183 711.3L184 611.3L185 659.0L186 454.0L187 271.8L188 339.5L189 604.6L190 445.3L191 560.0L192 509.0L193 461.2L194 552.5L195 940.0L196 751.7L197 531.3L198 369.9L199 455.5L200 391.1L201 479.4L202 513.2L203 458.5L204 305.3L205 438.6L206 441.9L207 510.0L208 326.1L209 297.8L210 438.6L211 505.3L212 482.4L213 513.9L214 319.5L215 454.0L216 478.1L217 507.6L218 488.6L219 531.2L220 597.1L221 534.3L222 717.9L223 556.5L224 695.5L225 593.3L226 712.6L227 728.5L228 738.7L229 723.4L230 793.1L231 723.5L232 864.5L233 589.8L234 831.1L235 825.8L236 850.0L237 756.7L238 673.2L239 598.8L240 324.0L241 312.8L242 425.4L243 662.0L244 580.7L245 591.6L246 371.8L247 533.2L248 462.0L249 608.1L250 680.4L251 514.6L252 494.1L253 446.7L254 541.8L255 496.9L256 477.2L257 514.5L258 594.9L259 543.3L260 542.3L261 528.2L262 534.6L263 406.2L264 511.9L265 616.2L266 447.4L267 535.0L268 335.6L269 510.6L270 574.1L271 697.7L272 622.3L273 709.6L274 493.6L275 555.7L276 407.4L277 535.3L278 498.5L279 509.1L280 592.3L281 572.0L282 491.1L283 550.0L284 492.4L285 325.7L286 617.6L287 540.9L288 667.8L289 357.0L290 467.0L291 469.5L292 417.5L293 575.3L294 483.6L295 558.6L296 503.0L297 406.9L298 468.7L299 486.5L300 493.8L301 525.6L302 394.3L303 493.7L304 468.1L305 354.0L306 576.6L307 520.3L308 632.3L309 235.3L310 502.8L311 402.4L312 520.2L313 418.3L314 647.1L315 612.3L316 785.5L317 691.3L318 469.6L319 527.7L320 631.9L321 565.3L322 661.6L323 626.9L324 612.4L325 583.4L326 440.3L327 591.5L328 658.1L329 660.9L330 381.4L331 535.0L332 540.4L333 417.4L334 462.2L335 520.0L336 487.1L337 532.2L338 576.5L339 483.0L340 681.9L341 536.7L342 733.1L343 494.0L344 611.4L345 808.6L346 691.3"/></svg><i style="top: 69.13%"></i></div>
-    <div class="fbm-ctl" data-state="paused"><span aria-hidden="true" title="Fractional Brownian motion with Hurst exponent 0.1, simulated live in your browser: each step is drawn exactly given the whole past (Hosking / Durbin-Levinson).">fBm, H = 0.1</span><button type="button" hidden aria-label="Continue the animation" title="Continue"><svg viewBox="0 0 10 10" aria-hidden="true"><path class="pause" d="M2 1h2v8H2zM6 1h2v8H6z"/><path class="play" d="M2.5 1 9 5l-6.5 4z"/></svg></button></div>
+    <div class="fbm" aria-hidden="true"><svg class="walk" viewBox="0 0 346 1000" preserveAspectRatio="none" focusable="false"><path d="M0 460.4L1 578.2L2 441.3L3 563.8L4 521.8L5 431.6L6 529.5L7 348.9L8 448.6L9 653.5L10 512.5L11 541.1L12 619.7L13 778.7L14 689.1L15 532.2L16 432.9L17 643.2L18 454.6L19 422.7L20 600.1L21 557.6L22 429.3L23 509.8L24 542.6L25 341.4L26 488.8L27 476.9L28 379.5L29 449.1L30 489.7L31 413.1L32 688.5L33 334.4L34 498.0L35 394.8L36 454.4L37 537.3L38 503.2L39 509.1L40 594.2L41 651.7L42 685.3L43 713.2L44 734.6L45 657.3L46 480.6L47 764.6L48 607.3L49 616.2L50 659.1L51 725.4L52 685.7L53 537.6L54 682.6L55 468.6L56 339.5L57 498.2L58 454.9L59 595.3L60 450.9L61 353.1L62 639.8L63 416.8L64 557.0L65 600.9L66 537.1L67 643.8L68 788.2L69 730.4L70 480.1L71 338.7L72 535.7L73 309.0L74 444.3L75 459.1L76 532.7L77 449.9L78 452.6L79 503.6L80 248.9L81 415.2L82 278.6L83 417.2L84 596.2L85 513.5L86 471.1L87 211.6L88 232.7L89 379.8L90 344.0L91 441.6L92 582.9L93 553.6L94 486.7L95 529.4L96 485.4L97 594.5L98 549.6L99 510.0L100 573.5L101 559.2L102 616.1L103 353.2L104 426.7L105 477.5L106 540.2L107 542.8L108 284.6L109 554.9L110 645.3L111 456.2L112 443.2L113 425.7L114 464.9L115 474.1L116 303.7L117 295.0L118 326.6L119 493.4L120 369.6L121 308.9L122 218.0L123 247.3L124 162.7L125 257.7L126 215.0L127 60.0L128 175.6L129 201.3L130 246.8L131 497.4L132 323.1L133 372.3L134 483.1L135 458.5L136 414.8L137 437.5L138 434.1L139 315.9L140 519.0L141 465.8L142 451.6L143 336.0L144 359.8L145 421.1L146 160.1L147 331.2L148 275.9L149 296.7L150 419.7L151 229.3L152 467.4L153 426.7L154 571.1L155 589.5L156 649.3L157 589.4L158 684.2L159 642.5L160 519.1L161 610.8L162 412.6L163 573.7L164 519.3L165 579.8L166 661.7L167 595.4L168 674.4L169 597.0L170 658.8L171 718.0L172 577.0L173 548.8L174 668.2L175 651.6L176 625.0L177 674.8L178 732.0L179 511.4L180 512.9L181 451.5L182 560.3L183 711.3L184 611.3L185 659.0L186 454.0L187 271.8L188 339.5L189 604.6L190 445.3L191 560.0L192 509.0L193 461.2L194 552.5L195 940.0L196 751.7L197 531.3L198 369.9L199 455.5L200 391.1L201 479.4L202 513.2L203 458.5L204 305.3L205 438.6L206 441.9L207 510.0L208 326.1L209 297.8L210 438.6L211 505.3L212 482.4L213 513.9L214 319.5L215 454.0L216 478.1L217 507.6L218 488.6L219 531.2L220 597.1L221 534.3L222 717.9L223 556.5L224 695.5L225 593.3L226 712.6L227 728.5L228 738.7L229 723.4L230 793.1L231 723.5L232 864.5L233 589.8L234 831.1L235 825.8L236 850.0L237 756.7L238 673.2L239 598.8L240 324.0L241 312.8L242 425.4L243 662.0L244 580.7L245 591.6L246 371.8L247 533.2L248 462.0L249 608.1L250 680.4L251 514.6L252 494.1L253 446.7L254 541.8L255 496.9L256 477.2L257 514.5L258 594.9L259 543.3L260 542.3L261 528.2L262 534.6L263 406.2L264 511.9L265 616.2L266 447.4L267 535.0L268 335.6L269 510.6L270 574.1L271 697.7L272 622.3L273 709.6L274 493.6L275 555.7L276 407.4L277 535.3L278 498.5L279 509.1L280 592.3L281 572.0L282 491.1L283 550.0L284 492.4L285 325.7L286 617.6L287 540.9L288 667.8L289 357.0L290 467.0L291 469.5L292 417.5L293 575.3L294 483.6L295 558.6L296 503.0L297 406.9L298 468.7L299 486.5L300 493.8L301 525.6L302 394.3L303 493.7L304 468.1L305 354.0L306 576.6L307 520.3L308 632.3L309 235.3L310 502.8L311 402.4L312 520.2L313 418.3L314 647.1L315 612.3L316 785.5L317 691.3L318 469.6L319 527.7L320 631.9L321 565.3L322 661.6L323 626.9L324 612.4L325 583.4L326 440.3L327 591.5L328 658.1L329 660.9L330 381.4L331 535.0L332 540.4L333 417.4L334 462.2L335 520.0L336 487.1L337 532.2L338 576.5L339 483.0L340 681.9L341 536.7L342 733.1L343 494.0L344 611.4L345 808.6L346 691.3"/></svg><i style="top: 69.13%"></i></div>
+    <div class="fbm-ctl" data-state="paused"><span aria-hidden="true" title="Fractional Brownian motion with Hurst exponent 0.1, simulated live in your browser: each step is drawn exactly given the whole past (Hosking / Durbin–Levinson)."><span>fBm</span><i>, </i><span>H = 0.1</span></span><button type="button" hidden aria-label="Continue the animation" title="Continue"><svg viewBox="0 0 10 10" aria-hidden="true"><path class="pause" d="M2 1h2v8H2zM6 1h2v8H6z"/><path class="play" d="M2.5 1 9 5l-6.5 4z"/></svg></button></div>
     <p>Assistant Professor in Mathematical Finance and Machine Learning at the
       Department of Statistics and Operations Research, University of Vienna.</p>
     <script>
 (function () {
-  // Exact fBm sampling: each fGn increment is drawn from its Gaussian law given the whole past
-  // (Hosking / Durbin-Levinson), so the path stays exact however long it runs.
-  var H = .1, cap = 1024, gam, X, phi, tmp, n = 0, v = 1, B = 0, u = 7, spare = null;
-  function alloc(c) {
-    var g = new Float64Array(c), x = new Float64Array(c), p = new Float64Array(c), k;
-    if (gam) { x.set(X); p.set(phi); }
-    g[0] = 1;   // fGn autocovariance, Var = 1 per step
-    for (k = 1; k < c; k++) g[k] = .5 * (Math.pow(k + 1, 2 * H) - 2 * Math.pow(k, 2 * H) + Math.pow(k - 1, 2 * H));
-    gam = g; X = x; phi = p; tmp = new Float64Array(c); cap = c;
-  }
+  // One figure per visit, picked at random (?hero=fbm|levy|sig forces one): a live fBm, the Lévy area
+  // of a planar Brownian motion, or a time-augmented fBm with its signature.
+  var u = 0, spare = null;
   function rnd() {   // mulberry32
     u = u + 0x6D2B79F5 | 0;
     var t = Math.imul(u ^ u >>> 15, 1 | u);
     t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
     return ((t ^ t >>> 14) >>> 0) / 4294967296;
   }
+  function seed(s) { u = s | 0; spare = null; }
   function gauss() {   // Box-Muller
     if (spare !== null) { var s = spare; spare = null; return s; }
     var r = Math.sqrt(-2 * Math.log(1 - rnd())), th = 2 * Math.PI * rnd();
     spare = r * Math.sin(th);
     return r * Math.cos(th);
   }
-  function step() {   // appends X_n and returns B_{n+1} = X_0 + ... + X_n
-    if (n + 1 >= cap) alloc(2 * cap);
-    var m = 0, d, k;
-    if (n > 0) {
-      d = gam[n];
-      for (k = 1; k < n; k++) d -= phi[k] * gam[n - k];
-      d /= v;   // phi_{n,n}
-      for (k = 1; k < n; k++) tmp[k] = phi[k] - d * phi[n - k];
-      for (k = 1; k < n; k++) phi[k] = tmp[k];
-      phi[n] = d;
-      v *= 1 - d * d;   // conditional variance
-      for (k = 1; k <= n; k++) m += phi[k] * X[n - k];
+  // Exact fGn sampling: each increment is drawn from its Gaussian law given the whole past
+  // (Hosking / Durbin–Levinson), so the path stays exact however long it runs. Var = 1 per step.
+  function fgn(H) {
+    var cap, n = 0, v = 1, gam, X, phi, tmp;
+    function alloc(c) {
+      var g = new Float64Array(c), x = new Float64Array(c), p = new Float64Array(c), k;
+      if (gam) { x.set(X); p.set(phi); }
+      g[0] = 1;   // fGn autocovariance
+      for (k = 1; k < c; k++) g[k] = .5 * (Math.pow(k + 1, 2 * H) - 2 * Math.pow(k, 2 * H) + Math.pow(k - 1, 2 * H));
+      gam = g; X = x; phi = p; tmp = new Float64Array(c); cap = c;
     }
-    X[n] = m + Math.sqrt(v) * gauss();
-    B += X[n++];
-    return B;
+    alloc(1024);
+    return function () {   // the next increment X_n
+      if (n + 1 >= cap) alloc(2 * cap);
+      var m = 0, d, k;
+      if (n > 0) {
+        d = gam[n];
+        for (k = 1; k < n; k++) d -= phi[k] * gam[n - k];
+        d /= v;   // phi_{n,n}
+        for (k = 1; k < n; k++) tmp[k] = phi[k] - d * phi[n - k];
+        for (k = 1; k < n; k++) phi[k] = tmp[k];
+        phi[n] = d;
+        v *= 1 - d * d;   // conditional variance
+        for (k = 1; k <= n; k++) m += phi[k] * X[n - k];
+      }
+      return X[n++] = m + Math.sqrt(v) * gauss();
+    };
   }
-  alloc(cap);
 
-  var hero = document.currentScript.parentNode, box = hero.querySelector('.fbm'), svg = box.firstElementChild,
-    line = svg.firstElementChild, hd = box.lastElementChild, ctl = hero.querySelector('.fbm-ctl'),
-    btn = ctl.querySelector('button'), still = matchMedia('(prefers-reduced-motion: reduce)'),
-    RATE = 20, AUTO = 5000, NMAX = 520, P = [], N = 0, lo, hi, run = false, budget = AUTO,
-    seen = 1, raf = 0, last = 0, acc = 0, k;
-  function push(b) { P.push(b); if (P.length > NMAX) P.shift(); }
-  function draw(reset) {
-    var c = Math.min(N, P.length), i = P.length - c, mn = 1 / 0, mx = -mn, d = '', y, m, h;
-    for (k = i; k < P.length; k++) { mn = Math.min(mn, P[k]); mx = Math.max(mx, P[k]); }
-    h = Math.max(mx - mn, 1) / 2; m = (mn + mx) / 2;
-    if (reset) { lo = m - h; hi = m + h; }
-    else {   // widen at once, narrow gently
-      lo = m - h < lo ? m - h : lo + (m - h - lo) * .05;
-      hi = m + h > hi ? m + h : hi + (m + h - hi) * .05;
+  var hero = document.currentScript.parentNode, box = hero.querySelector('.fbm'), ctl = hero.querySelector('.fbm-ctl'),
+    label = ctl.firstElementChild, btn = ctl.querySelector('button'), still = matchMedia('(prefers-reduced-motion: reduce)'),
+    want = /[?&]hero=(fbm|levy|sig)(&|$)/.exec(location.search), pick;
+  seed(window.crypto ? crypto.getRandomValues(new Uint32Array(1))[0] : Math.random() * 4294967296);
+  pick = want ? want[1] : ['fbm', 'levy', 'sig'][Math.floor(3 * rnd())];
+  hero.setAttribute('data-hero', pick);
+  if (want) try {   // forced (the academic page's Software link asks for fbm): drop ?hero= from the address
+    var url = new URL(location.href);
+    url.searchParams.delete('hero');
+    history.replaceState(history.state, '', url.href);
+  } catch (e) {}
+
+  function fbm() {   // seeded history, then a fresh future for 5 s
+    var svg = box.firstElementChild, line = svg.firstElementChild, hd = box.lastElementChild, next, fresh = u,
+      RATE = 20, AUTO = 5000, NMAX = 520, P = [], N = 0, B = 0, lo, hi, run = false, budget = AUTO,
+      seen = 1, raf = 0, last = 0, acc = 0, k;
+    function push() { P.push(B += next()); if (P.length > NMAX) P.shift(); }
+    function draw(reset) {
+      var c = Math.min(N, P.length), i = P.length - c, mn = 1 / 0, mx = -mn, d = '', y, m, h;
+      for (k = i; k < P.length; k++) { mn = Math.min(mn, P[k]); mx = Math.max(mx, P[k]); }
+      h = Math.max(mx - mn, 1) / 2; m = (mn + mx) / 2;
+      if (reset) { lo = m - h; hi = m + h; }
+      else {   // widen at once, narrow gently
+        lo = m - h < lo ? m - h : lo + (m - h - lo) * .05;
+        hi = m + h > hi ? m + h : hi + (m + h - hi) * .05;
+      }
+      for (k = 0; k < c; k++) { y = (60 + 880 * (hi - P[i + k]) / (hi - lo)).toFixed(1); d += (k ? 'L' : 'M') + k + ' ' + y; }
+      line.setAttribute('d', d);
+      hd.style.top = y / 10 + '%';
     }
-    for (k = 0; k < c; k++) { y = (60 + 880 * (hi - P[i + k]) / (hi - lo)).toFixed(1); d += (k ? 'L' : 'M') + k + ' ' + y; }
-    line.setAttribute('d', d);
-    hd.style.top = y / 10 + '%';
+    function fit() {   // about 2 px per step at any width
+      var c = Math.max(120, Math.min(NMAX, Math.round(box.clientWidth / 2)));
+      if (c !== N) { N = c; svg.setAttribute('viewBox', '0 0 ' + (c - 1) + ' 1000'); draw(1); }
+    }
+    function frame(t) {   // RATE steps per second; the 5 s budget only runs down while visible
+      raf = 0;
+      if (!(run && seen && !document.hidden)) { last = 0; return; }
+      if (last) { var dt = Math.min(t - last, 100); acc += dt; budget -= dt; }
+      last = t;
+      var due = Math.floor(acc * RATE / 1000);
+      if (due) { acc -= due * 1000 / RATE; while (due--) push(); draw(); }
+      if (budget <= 0) { set(false); return; }
+      raf = requestAnimationFrame(frame);
+    }
+    function sync() { if (run && seen && !document.hidden && !raf) { last = 0; raf = requestAnimationFrame(frame); } }
+    function set(on) {
+      run = on;
+      ctl.dataset.state = on ? 'running' : 'paused';
+      btn.setAttribute('aria-label', on ? 'Pause the animation' : 'Continue the animation');
+      btn.title = on ? 'Pause' : 'Continue';
+      if (on) sync(); else if (raf) { cancelAnimationFrame(raf); raf = 0; }
+    }
+    seed(7); next = fgn(.1);
+    for (k = 0; k < NMAX; k++) push();   // seeded history fills the window
+    seed(fresh);
+    fit();
+    if (window.ResizeObserver) new ResizeObserver(fit).observe(box);
+    if (window.IntersectionObserver) new IntersectionObserver(function (e) { seen = e[e.length - 1].isIntersecting; sync(); }).observe(box);
+    document.addEventListener('visibilitychange', sync);
+    btn.addEventListener('click', function () { if (run) set(false); else { budget = 1 / 0; set(true); } });
+    btn.hidden = false;
+    set(!still.matches);   // autoplay for 5 s unless reduced motion is on
   }
-  function fit() {   // about 2 px per step at any width
-    var c = Math.max(120, Math.min(NMAX, Math.round(box.clientWidth / 2)));
-    if (c !== N) { N = c; svg.setAttribute('viewBox', '0 0 ' + (c - 1) + ' 1000'); draw(1); }
+
+  // Planar geometry for the Lévy area and signature figures
+  function cross(ax, ay, bx, by) { return ax * by - ay * bx; }
+  function area(Q) {   // signed; for a path closed by its chord, its Lévy area
+    for (var a = 0, i = 0, j = Q.length - 1; i < Q.length; j = i++) a += cross(Q[j][0], Q[j][1], Q[i][0], Q[i][1]);
+    return a / 2;
   }
-  function frame(t) {   // RATE steps per second; the 5 s budget only runs down while visible
-    raf = 0;
-    if (!(run && seen && !document.hidden)) { last = 0; return; }
-    if (last) { var dt = Math.min(t - last, 100); acc += dt; budget -= dt; }
-    last = t;
-    var due = Math.floor(acc * RATE / 1000);
-    if (due) { acc -= due * 1000 / RATE; while (due--) push(step()); draw(); }
-    if (budget <= 0) { set(false); return; }
-    raf = requestAnimationFrame(frame);
+  function bounds(Q) {   // [x min, y min, x max, y max]
+    var b = [1 / 0, 1 / 0, -1 / 0, -1 / 0];
+    Q.forEach(function (p) {
+      b[0] = Math.min(b[0], p[0]); b[1] = Math.min(b[1], p[1]); b[2] = Math.max(b[2], p[0]); b[3] = Math.max(b[3], p[1]);
+    });
+    return b;
   }
-  function sync() { if (run && seen && !document.hidden && !raf) { last = 0; raf = requestAnimationFrame(frame); } }
-  function set(on) {
-    run = on;
-    ctl.dataset.state = on ? 'running' : 'paused';
-    btn.setAttribute('aria-label', on ? 'Pause the animation' : 'Continue the animation');
-    btn.title = on ? 'Pause' : 'Continue';
-    if (on) sync(); else if (raf) { cancelAnimationFrame(raf); raf = 0; }
+  function hit(a, b, c, d) {   // proper crossing a + s (b - a) = c + t (d - c): [s, t, point]
+    var rx = b[0] - a[0], ry = b[1] - a[1], sx = d[0] - c[0], sy = d[1] - c[1], qx = c[0] - a[0], qy = c[1] - a[1], q, s;
+    if (cross(rx, ry, qx, qy) * cross(rx, ry, d[0] - a[0], d[1] - a[1]) >= 0) return;
+    if (cross(sx, sy, qx, qy) * cross(sx, sy, b[0] - c[0], b[1] - c[1]) <= 0) return;
+    q = cross(rx, ry, sx, sy); s = cross(qx, qy, sx, sy) / q;
+    return [s, cross(qx, qy, rx, ry) / q, [a[0] + s * rx, a[1] + s * ry]];
   }
-  for (k = 0; k < NMAX; k++) push(step());   // seeded history fills the window
-  u = (window.crypto ? crypto.getRandomValues(new Uint32Array(1))[0] : Math.random() * 4294967296) | 0;   // fresh future
-  fit();
-  if (window.ResizeObserver) new ResizeObserver(fit).observe(box);
-  if (window.IntersectionObserver) new IntersectionObserver(function (e) { seen = e[e.length - 1].isIntersecting; sync(); }).observe(box);
-  document.addEventListener('visibilitychange', sync);
-  btn.addEventListener('click', function () { if (run) set(false); else { budget = 1 / 0; set(true); } });
-  btn.hidden = false;
-  set(!still.matches);   // autoplay for 5 s unless reduced motion is on
+  function crossings(P) {   // of the polyline with itself: [i, j, hit]
+    for (var X = [], i = 0, j, h; i < P.length - 1; i++) for (j = i + 2; j < P.length - 1; j++)
+      if ((h = hit(P[i], P[i + 1], P[j], P[j + 1]))) X.push([i, j, h]);
+    return X;
+  }
+  // Faces of P[0..k] closed by its chord (segment k), as [winding number, polygon] with zeros dropped
+  function faces(P, X, k) {
+    var V = P.slice(0, k + 1), cut = [], org = [], ang = [], out = [], at = [], face = [], cyc = [], w = [], adj = [],
+      lv = 0, s, h, i, f, c, L;
+    function meet(s1, s2, h) { cut[s1].push([h[0], V.length]); cut[s2].push([h[1], V.length]); V.push(h[2]); }
+    for (s = 0; s <= k; s++) cut.push([]);
+    X.forEach(function (x) { if (x[1] < k) meet(x[0], x[1], x[2]); });
+    for (s = 1; s < k - 1; s++) if ((h = hit(P[k], P[0], P[s], P[s + 1]))) meet(k, s, h);
+    // half-edges 2e along a piece of a segment, 2e + 1 against it, at the segment's own angle
+    cut.forEach(function (cs, s) {
+      var e = s < k ? s + 1 : 0, th = Math.atan2(P[e][1] - P[s][1], P[e][0] - P[s][0]), a = s;
+      cs.sort(function (p, q) { return p[0] - q[0]; });
+      cs.map(function (p) { return p[1]; }).concat(e).forEach(function (b) {
+        org.push(a, b); ang.push(th, th > 0 ? th - Math.PI : th + Math.PI); a = b;
+      });
+    });
+    V.forEach(function () { out.push([]); });
+    for (h = 0; h < org.length; h++) { out[org[h]].push(h); face.push(-1); }
+    out.forEach(function (L) { L.sort(function (p, q) { return ang[p] - ang[q]; }).forEach(function (h, i) { at[h] = i; }); });
+    for (h = 0; h < org.length; h++) if (face[h] < 0) {   // each face, walked with it on the left
+      for (c = [], i = h; face[i] < 0; i = L[(at[i ^ 1] + L.length - 1) % L.length]) {
+        face[i] = cyc.length; c.push(i); L = out[org[i ^ 1]];
+      }
+      cyc.push(c); w.push(null); adj.push([]);
+    }
+    // winding numbers: +1 crossing the path from right to left; 0 left of the last edge anticlockwise at the
+    // leftmost vertex (the unbounded face)
+    for (h = 0; h < org.length; h += 2) { adj[face[h + 1]].push(face[h], 1); adj[face[h]].push(face[h + 1], -1); }
+    V.forEach(function (p, i) { if (p[0] < V[lv][0]) lv = i; });
+    L = [face[out[lv][out[lv].length - 1]]];
+    w[L[0]] = 0;
+    while (L.length) for (f = L.pop(), i = 0; i < adj[f].length; i += 2)
+      if (w[adj[f][i]] === null) { w[adj[f][i]] = w[f] + adj[f][i + 1]; L.push(adj[f][i]); }
+    return cyc.map(function (c, f) { return [w[f], c.map(function (h) { return V[org[h]]; })]; }).filter(function (x) { return x[0]; });
+  }
+
+  // P with chord and faces, static until the pointer scrubs t over the plot. place(w, h) -> [svg width, path
+  // width, data -> px, band top, band height]; extra(k) -> caption [head, separator, tail] while scrubbing
+  function figure(P, X, name, tip, place, extra) {
+    var N = P.length - 1, k = N, goal = N, over = false, raf = 0, pw, xy, x0, xn, tx, ty, drag, html = '', i, svg, hit,
+      el = {}, fill;
+    for (i = 0; i < 8; i++) html += '<path class="' + (i < 4 ? 'pos' : 'neg') + ' w' + (i % 4 + 1) + '"/>';
+    box.innerHTML = '<svg class="fig" focusable="false">' + html + '<path class="chord"/><path class="rest"/><path class="line"/>' +
+      '<g class="cells"></g><circle class="x0" r="2.75"/><circle class="halo" r="7.5"/><circle class="x1" r="3"/><rect class="hit"/></svg>';
+    svg = box.firstChild; hit = svg.lastChild; fill = svg.querySelectorAll('.w1, .w2, .w3, .w4');
+    ['chord', 'rest', 'line', 'x0', 'halo', 'x1'].forEach(function (c) { el[c] = svg.querySelector('.' + c); });
+    label.title = tip;
+    function say(c) { label.innerHTML = '<span>' + c[0] + '</span><i>' + c[1] + '</i><span>' + c[2] + '</span>'; }
+    function d(Q) { return 'M' + Q.map(function (p) { p = xy(p); return p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join('L'); }
+    function dot(c, p) { p = xy(p); c.setAttribute('cx', p[0].toFixed(1)); c.setAttribute('cy', p[1].toFixed(1)); }
+    function show() {
+      var D = ['', '', '', '', '', '', '', ''], t = extra(k);
+      faces(P, X, k).forEach(function (f) { D[(f[0] > 0 ? -1 : 3) + Math.min(4, Math.abs(f[0]))] += d(f[1]) + 'Z'; });
+      [].forEach.call(fill, function (e, i) { e.setAttribute('d', D[i]); });
+      el.line.setAttribute('d', d(P.slice(0, k + 1)));
+      el.rest.setAttribute('d', k < N ? d(P.slice(k)) : '');
+      el.chord.setAttribute('d', d([P[0], P[k]]));
+      dot(el.x0, P[0]); dot(el.halo, P[k]); dot(el.x1, P[k]);
+      say(over ? t : name);
+    }
+    function fit() {
+      var L = -parseFloat(getComputedStyle(box).marginLeft), H = box.clientHeight, r = place(box.clientWidth - L, H);
+      if (!r) return;   // no room yet: the page is still loading
+      svg.style.cssText = 'left:' + L + 'px;top:0;width:' + r[0] + 'px;height:' + H + 'px';
+      svg.setAttribute('viewBox', '0 0 ' + r[0] + ' ' + H);
+      pw = r[1]; xy = r[2]; x0 = xy(P[0])[0]; xn = xy(P[N])[0];
+      hit.setAttribute('y', r[3] - 3); hit.setAttribute('width', r[0]); hit.setAttribute('height', r[4] + 6);
+      show();
+    }
+    function frame() {   // scrubs jump; the full path grows back in a few frames unless motion is reduced
+      raf = 0;
+      k = over || still.matches ? goal : Math.min(N, k + Math.max(2, Math.ceil((N - k) / 4)));
+      show();
+      if (k !== goal) raf = requestAnimationFrame(frame);
+    }
+    function to(j, on) {   // on: the caption shows t
+      if (xy && !raf && (j !== k || on !== over)) raf = requestAnimationFrame(frame);
+      goal = j; over = on;
+    }
+    function scrub(e) {   // t from x between the end points; right of the path (the cells) holds t
+      var x = e.clientX - svg.getBoundingClientRect().left;
+      if (x <= 1.02 * pw) to(Math.max(2, Math.min(N, Math.round((x - x0) / (xn - x0) * N))), true);
+    }
+    function leave() { to(N, false); }
+    hit.onpointerdown = function (e) { tx = e.clientX; ty = e.clientY; drag = e.pointerType === 'mouse'; if (drag) scrub(e); };
+    hit.onpointermove = function (e) {   // touch scrubs only a horizontal drag, so a vertical swipe just scrolls
+      var dx = Math.abs(e.clientX - tx), dy = Math.abs(e.clientY - ty);
+      if (e.pointerType === 'mouse' || drag || (drag = dx >= 6 && dx > dy)) scrub(e);
+    };
+    hit.onpointerup = function (e) { if (e.pointerType !== 'mouse') leave(); };
+    hit.onpointerleave = leave;
+    hit.onpointercancel = function () {   // the browser took the gesture: restore at once
+      if (raf) cancelAnimationFrame(raf);
+      raf = 0; over = false; goal = k = N;
+      if (xy) show();
+    };
+    say(name);
+    fit();
+    if (window.ResizeObserver) new ResizeObserver(fit).observe(box);
+  }
+
+  // Lévy area: planar BM on [0, 1], 300 steps, turned so its chord runs left to right (area and windings are
+  // invariant); the first legible of up to 200 samples, else the best
+  function levy() {
+    var N = 300, sd = Math.sqrt(1 / N), P, Q, top = -1, n, i, x, y, c, s, b, a;
+    for (n = 0; n < 200 && top < 1; n++) {
+      for (Q = [[0, 0]], x = y = i = 0; i < N; i++) {
+        x += sd * gauss(); y += sd * gauss();
+        Q.push([x, y]);
+      }
+      c = Math.hypot(x, y);
+      Q.forEach(function (p) { var px = p[0]; p[0] = (px * x + p[1] * y) / c; p[1] = (p[1] * x - px * y) / c; });
+      if ((s = legible(Q, c)) > top) { top = s; P = Q; }
+    }
+    b = bounds(P); a = (b[2] - b[0]) / (b[3] - b[1]);
+    figure(P, crossings(P), ['Lévy area', ', ', 'planar BM'],
+      'Lévy area A = ½∫(X dY − Y dX) of a standard planar Brownian motion on [0, 1], sampled in your browser ' +
+      '(300 steps; picked for legibility from up to 200 draws, turned so its chord is horizontal, x stretched up ' +
+      'to 2.5× to fit): the sum of the face areas of the path closed by its chord, weighted by winding number ' +
+      '(coral anticlockwise, teal clockwise).',
+      function (aw, H) {   // full height, stretched at most 2.5x into a wide box
+        var dh = Math.min(H - 6, aw / a), dw = Math.min(aw, 2.5 * a * dh), y0 = (H - dh) / 2;
+        return dh < 8 ? null : [dw, dw, function (p) {
+          return [(p[0] - b[0]) / (b[2] - b[0]) * dw, y0 + (b[3] - p[1]) / (b[3] - b[1]) * dh];
+        }, y0, dh];
+      },
+      function (k) {   // A to 2 decimals (the 300-step path is off by about .02), rounded before its sign
+        var A = +area(P.slice(0, k + 1)).toFixed(2);
+        return ['t = ' + (k / N).toFixed(3), ' · ', 'A = ' + (A < 0 ? '−' : A > 0 ? '+' : '') + Math.abs(A).toFixed(2)];
+      });
+  }
+  // Smallest ratio of measure to threshold (>= 1: legible): aspect >= 2.2, chord >= 75% of the width,
+  // |x_t / chord - t| <= .35, <= 12% of points in a cell of a 12 x 4 grid, faces over .25% of the box
+  // covering >= 5% of it per sign
+  function legible(P, c) {
+    var n = P.length - 1, b = bounds(P), w = b[2] - b[0], h = b[3] - b[1], grid = [], most = 0, drift = 0, A = [0, 0], s;
+    P.forEach(function (p, i) {
+      var key = Math.min(11, 12 * (p[0] - b[0]) / w | 0) + 12 * Math.min(3, 4 * (p[1] - b[1]) / h | 0);
+      most = Math.max(most, grid[key] = (grid[key] || 0) + 1);
+      drift = Math.max(drift, Math.abs(p[0] / c - i / n));
+    });
+    s = Math.min(w / h / 2.2, c / w / .75, .12 * (n + 1) / most, .35 / drift);
+    if (s < 1) return s;
+    faces(P, crossings(P), n).forEach(function (f) {
+      var a = Math.abs(area(f[1]));
+      if (a > .0025 * w * h) A[f[0] > 0 ? 0 : 1] += Math.abs(f[0]) * a;
+    });
+    return Math.min(s, A[0] / (w * h) / .05, A[1] / (w * h) / .05);
+  }
+
+  // Signature of X = (t, B^H_t), H = 0.1, 128 steps, to level 3 by Chen: S_{0,t_j} = S_{0,t_{j-1}} (x) exp(dX_j);
+  // words 1, 2 | 11 ... 22 | 111 ... 222 at a | 2 + 2a + b | 6 + 4a + 2b + c
+  function sig() {
+    var N = 128, hurst = .1, next = fgn(hurst), P = [[0, 0]], S = [], s = [], W = ['1', '2'], cells = [], lo = 0, hi = 0, i, j, a, b, c, d, t;
+    for (i = 0; i < 6; i++) W.push(W[i] + '1', W[i] + '2');
+    for (i = 0; i < 14; i++) s.push(0);
+    S.push(s);
+    for (j = 1; j <= N; j++) {
+      d = [1 / N, next() * Math.pow(N, -hurst)];   // B^H_{j/N} = N^{-H} (X_0 + ... + X_{j-1})
+      P.push([j / N, P[j - 1][1] + d[1]]);
+      lo = Math.min(lo, P[j][1]); hi = Math.max(hi, P[j][1]);
+      for (t = s.slice(), a = 0; a < 2; a++) {
+        t[a] += d[a];
+        for (b = 0; b < 2; b++) {
+          t[2 + 2 * a + b] += s[a] * d[b] + d[a] * d[b] / 2;
+          for (c = 0; c < 2; c++) t[6 + 4 * a + 2 * b + c] += s[2 + 2 * a + b] * d[c] + s[a] * d[b] * d[c] / 2 + d[a] * d[b] * d[c] / 6;
+        }
+      }
+      S.push(s = t);
+    }
+    figure(P, [], ['signature', ', ', 'levels 1–3'],   // (t, B) never crosses itself
+      'Signature of (t, B_t), B a fractional Brownian motion (H = 0.1) sampled exactly at 128 times in your browser ' +
+      'and joined by straight lines: the iterated integrals of levels 1–3 of that path, computed exactly by Chen’s ' +
+      'identity. Cells: words in the letters 1 = t, 2 = B (1, 2 | 11 … 22 | 111 … 222); coral > 0, teal < 0, ' +
+      'opacity |S_w| over the largest |entry| of its level at t. Shaded between path and chord: its Lévy area ' +
+      '½(S¹² − S²¹), faces weighted by winding number (coral anticlockwise, teal clockwise).',
+      function (aw, H) {
+        // 2 x 2 blocks of cells of side c right of the path (2.5 times as wide as high at least), level 3
+        // stacked in a tall box; words from 36 px
+        var cA = Math.min(52, (H - 6) / 2, aw / 13.6), cB = Math.min(52, (H - 6) / 4.3, aw / 16.8), up = cB >= .85 * cA,
+          c = Math.floor(up ? cB : cA), g = Math.round(.35 * c), h = Math.round(g / 2), fh = up ? 4 * c + h : 2 * c,
+          pw = Math.min(aw - 2 * g - (up ? 5 * c + 2 * g : 7 * c + 2 * g + h), 7 * fh), x = pw + 2 * g,
+          y = Math.round((H - fh) / 2), ym = Math.round((H - 2 * c) / 2), el = box.querySelector('.cells'), html = '';
+        if (c < 8) return null;
+        function block(x, y, rows, cols, w) {   // words w, w + 1, ... row by row
+          for (var i = 0; i < rows * cols; i++) {
+            var cx = x + i % cols * c + .5, cy = y + (i / cols | 0) * c + .5;
+            html += '<rect x="' + cx + '" y="' + cy + '" width="' + c + '" height="' + c + '"/>' +
+              (c < 36 ? '' : '<text x="' + (cx + c / 2) + '" y="' + (cy + c / 2) + '">' + W[w + i] + '</text>');
+          }
+        }
+        block(x, ym, 2, 1, 0);
+        block(x += c + g, ym, 2, 2, 2);
+        block(x += 2 * c + g, y, 2, 2, 6);
+        block(up ? x : x += 2 * c + h, up ? y + 2 * c + h : y, 2, 2, 10);
+        el.innerHTML = html;
+        el.style.fontSize = Math.min(13, Math.round(c * .26)) + 'px';
+        cells = el.querySelectorAll('rect');
+        return [x + 2 * c + 1, pw, function (p) { return [p[0] * pw, y + (hi - p[1]) / (hi - lo) * fh]; }, y, fh];
+      },
+      function (k) {   // each level scaled by its largest |entry| at t
+        var m = [0, 0, 0], L = function (w) { return w < 2 ? 0 : w < 6 ? 1 : 2; };
+        S[k].forEach(function (v, w) { m[L(w)] = Math.max(m[L(w)], Math.abs(v)); });
+        [].forEach.call(cells, function (e, w) {
+          var v = S[k][w] / m[L(w)];
+          e.setAttribute('class', v < 0 ? 'n' : 'p');
+          e.style.setProperty('--a', Math.abs(v).toFixed(3));
+        });
+        return ['signature', ', ', 't = ' + (k / N).toFixed(2)];
+      });
+  }
+
+  ({fbm: fbm, levy: levy, sig: sig})[pick]();
 })();
     </script>
   </div>
