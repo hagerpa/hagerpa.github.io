@@ -458,12 +458,7 @@
       hit.setAttribute('y', r[3] - 3); hit.setAttribute('width', r[0]); hit.setAttribute('height', r[4] + 6);
       show();
     }
-    function frame() {   // scrubs jump; the full path grows back in a few frames unless motion is reduced
-      raf = 0;
-      k = over || still.matches ? goal : Math.min(N, k + Math.max(2, Math.ceil((N - k) / 4)));
-      show();
-      if (k !== goal) raf = requestAnimationFrame(frame);
-    }
+    function frame() { raf = 0; k = goal; show(); }   // at most one redraw per frame
     function to(j, on) {   // on: the caption shows t
       if (xy && !raf && (j !== k || on !== over)) raf = requestAnimationFrame(frame);
       goal = j; over = on;
@@ -472,7 +467,7 @@
       var x = e.clientX - svg.getBoundingClientRect().left;
       if (x <= 1.02 * pw) to(Math.max(2, Math.min(N, Math.round((x - x0) / (xn - x0) * N))), true);
     }
-    function leave() { to(N, false); }
+    function leave() { if (goal === N) to(N, false); }   // the figure stays at t; at t = 1 the caption names it again
     hit.onpointerdown = function (e) { tx = e.clientX; ty = e.clientY; drag = e.pointerType === 'mouse'; if (drag) scrub(e); };
     hit.onpointermove = function (e) {   // touch scrubs only a horizontal drag, so a vertical swipe just scrolls
       var dx = Math.abs(e.clientX - tx), dy = Math.abs(e.clientY - ty);
@@ -480,11 +475,7 @@
     };
     hit.onpointerup = function (e) { if (e.pointerType !== 'mouse') leave(); };
     hit.onpointerleave = leave;
-    hit.onpointercancel = function () {   // the browser took the gesture: restore at once
-      if (raf) cancelAnimationFrame(raf);
-      raf = 0; over = false; goal = k = N;
-      if (xy) show();
-    };
+    hit.onpointercancel = leave;   // the browser took the gesture (a scroll): no scrub has started
     say(name);
     fit();
     if (window.ResizeObserver) new ResizeObserver(fit).observe(box);
